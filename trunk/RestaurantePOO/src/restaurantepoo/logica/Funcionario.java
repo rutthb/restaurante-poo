@@ -107,11 +107,4 @@ public class Funcionario {
         return "Funcionario{" + "funcionario=" + funcionario + "nome=" + nome + "telefone=" + telefone + "endereco=" + endereco + "cpf=" + cpf + "salario=" + salario + "funcao=" + funcao + '}';
     }
 
-    private Connection conexao;
-
-    public void testeConexao() throws SQLException{
-        this.conexao = CriaConexao.getConexao();
-
-    }
-
 }

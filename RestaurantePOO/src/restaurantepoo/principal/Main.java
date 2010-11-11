@@ -8,6 +8,7 @@ package restaurantepoo.principal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import restaurantepoo.bancodados.CriaConexao;
+import restaurantepoo.dao.FuncionarioDao;
 import restaurantepoo.logica.Funcionario;
 
 /**
@@ -21,7 +22,7 @@ public class Main {
      */
     public static void main(String[] args) throws SQLException{
 
-        Funcionario func = new Funcionario();
+        FuncionarioDao func = new FuncionarioDao();
         System.out.println(func.toString());
 
         func.testeConexao();

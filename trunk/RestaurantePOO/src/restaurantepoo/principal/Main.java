@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import restaurantepoo.bancodados.CriaConexao;
 import restaurantepoo.dao.FuncionarioDao;
+import restaurantepoo.dao.ProdutoDao;
 import restaurantepoo.logica.Funcionario;
+import restaurantepoo.logica.Produto;
 
 /**
  *
@@ -22,10 +24,11 @@ public class Main {
      */
     public static void main(String[] args) throws SQLException{
 
-        FuncionarioDao func = new FuncionarioDao();
-        System.out.println(func.toString());
+        Produto p = new Produto("Sudo de Laranja", 2.50, "Suco de laranja natural 500 ml");
+        System.out.println(p.toString());
+        ProdutoDao pd = new ProdutoDao();
+        System.out.println("conexão realizada com sucesso");
+        pd.adiciona(p);
 
     }
-
-
 }

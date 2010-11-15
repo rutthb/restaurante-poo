@@ -22,13 +22,14 @@ public class ProdutoDao {
 
     private Connection conexao;
 
-    public void ProdutoDao() throws SQLException{
+    public ProdutoDao() throws SQLException{
         this.conexao = CriaConexao.getConexao();
     }
 
     public void adiciona(Produto p) throws SQLException{
+        
         String  sql = "insert into produto (nome, descricao, preco) " +
-                "values (a,s,2)";
+                "values (?,?,?)";
 
         PreparedStatement stmt = conexao.prepareStatement(sql);
 

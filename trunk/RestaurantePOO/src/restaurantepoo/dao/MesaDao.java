@@ -17,7 +17,7 @@ public class MesaDao {
 
     private Connection conexao;
 
-    public void MesaDao() throws SQLException{
+    public MesaDao() throws SQLException{
         this.conexao = CriaConexao.getConexao();
     }
 

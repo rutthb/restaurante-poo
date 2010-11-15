@@ -17,7 +17,7 @@ public class FuncionarioDao {
 
     private Connection conexao;
 
-    public void FuncionarioDao() throws SQLException{
+    public FuncionarioDao() throws SQLException{
         this.conexao = CriaConexao.getConexao();
     }
 

@@ -26,8 +26,10 @@ public class Main {
 
         Produto p = new Produto("Sudo de Laranja", 2.50, "Suco de laranja natural 500 ml");
         System.out.println(p.toString());
+
         ProdutoDao pd = new ProdutoDao();
         System.out.println("conexão realizada com sucesso");
+
         pd.adiciona(p);
 
     }

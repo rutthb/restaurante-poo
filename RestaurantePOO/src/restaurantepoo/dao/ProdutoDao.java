@@ -28,7 +28,7 @@ public class ProdutoDao {
 
     public void adiciona(Produto p) throws SQLException{
         String  sql = "insert into produto (nome, descricao, preco) " +
-                "values (?,?,?)";
+                "values (a,s,2)";
 
         PreparedStatement stmt = conexao.prepareStatement(sql);
 

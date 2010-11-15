@@ -26,13 +26,13 @@ import restaurantepoo.bancodados.CriaConexao;
  */
 public class Funcionario {
 
-    int funcionario;
-    String nome;
-    String telefone;
-    String endereco;
-    String cpf;
-    double salario;
-    String funcao;
+    private int funcionario;
+    private String nome;
+    private String telefone;
+    private String endereco;
+    private String cpf;
+    private double salario;
+    private String funcao;
 
     public Funcionario(String nome, String telefone, String endereco, String cpf, double salario, String funcao) {
         this.nome = nome;

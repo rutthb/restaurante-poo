@@ -19,8 +19,7 @@ public class FuncionarioDao {
     private Connection conexao;
 
     public void testeConexao() throws SQLException{
-        conexao = CriaConexao.getConexao();
-
+        this.conexao = CriaConexao.getConexao();
     }
 
 }

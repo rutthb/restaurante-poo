@@ -86,7 +86,7 @@ public class ProdutoDao {
     }
 
     public void remove(Produto p1) throws SQLException{
-        String sql = "delete from produto where id=?";
+        String sql = "delete from produto where produto=?";
         PreparedStatement stmt = conexao.prepareStatement(sql);
         
         stmt.setString(1, String.valueOf(p1.getProduto()));

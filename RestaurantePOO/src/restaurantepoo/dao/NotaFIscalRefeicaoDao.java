@@ -17,7 +17,7 @@ public class NotaFIscalRefeicaoDao {
 
     private Connection conexao;
 
-    public void NotaFIscalRefeicaoDao() throws SQLException{
+    public NotaFIscalRefeicaoDao() throws SQLException{
         this.conexao = CriaConexao.getConexao();
     }
 

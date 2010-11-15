@@ -5,10 +5,19 @@
 
 package restaurantepoo.dao;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import restaurantepoo.bancodados.CriaConexao;
+
 /**
  *
  * @author Antonio
  */
 public class NotaFiscalItens {
 
+    private Connection conexao;
+
+    public void NotaFiscalItens() throws SQLException{
+        this.conexao = CriaConexao.getConexao();
+    }
 }

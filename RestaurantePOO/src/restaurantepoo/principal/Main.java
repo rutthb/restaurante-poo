@@ -25,7 +25,6 @@ public class Main {
         FuncionarioDao func = new FuncionarioDao();
         System.out.println(func.toString());
 
-        func.testeConexao();
     }
 
 

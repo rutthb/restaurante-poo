@@ -19,7 +19,7 @@ public class CriaConexao {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             System.out.println("Conectando ao Banco");
-            return DriverManager.getConnection("jdbc:mysql://localhost/restaurante", "root", "admin");
+            return DriverManager.getConnection("jdbc:mysql://localhost/restaurantepoo", "root", "admin");
 
         } catch (ClassNotFoundException e) {
             throw new SQLException(e.getMessage());

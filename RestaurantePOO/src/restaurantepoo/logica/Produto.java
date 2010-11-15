@@ -19,8 +19,7 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(int produto, String nome, double preco, String descricao) {
-        this.produto = produto;
+    public Produto(String nome, double preco, String descricao) {
         this.nome = nome;
         this.preco = preco;
         this.descricao = descricao;
@@ -56,6 +55,11 @@ public class Produto {
 
     public void setProduto(int produto) {
         this.produto = produto;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" + "\nproduto=" + produto + "\nnome=" + nome + "\npreco=" + preco + "\ndescricao=" + descricao + "\n" + '}';
     }
 
     

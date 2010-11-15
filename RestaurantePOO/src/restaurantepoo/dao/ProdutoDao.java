@@ -27,14 +27,15 @@ public class ProdutoDao {
     }
 
     public void adiciona(Produto p) throws SQLException{
-        String  sql = "insert into produto (nome, preco, descricao)" +
+        String  sql = "insert into produto (nome, descricao, preco) " +
                 "values (?,?,?)";
+
         PreparedStatement stmt = conexao.prepareStatement(sql);
 
         // Seta os valores
         stmt.setString(1, p.getNome());
-        stmt.setString(2, String.valueOf(p.getPreco()));
-        stmt.setString(3, p.getDescricao());
+        stmt.setString(2, p.getDescricao());
+        stmt.setString(3, String.valueOf(p.getPreco()));
 
         // Executa o código SQL
         stmt.execute();
@@ -86,7 +87,7 @@ public class ProdutoDao {
     public void remove(Produto p1) throws SQLException{
         String sql = "delete from produto where id=?";
         PreparedStatement stmt = conexao.prepareStatement(sql);
-
+        
         stmt.setString(1, String.valueOf(p1.getProduto()));
 
         stmt.execute();

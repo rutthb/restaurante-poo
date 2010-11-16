@@ -11,9 +11,13 @@
 
 package restaurantepoo.forms;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import restaurantepoo.dao.FuncionarioDao;
 import restaurantepoo.logica.Funcionario;
 
 /**
@@ -23,17 +27,58 @@ import restaurantepoo.logica.Funcionario;
 public class jFCadFuncionario extends javax.swing.JFrame {
 
     /** Creates new form jFCadFuncionario */
-    public jFCadFuncionario() {
+    public jFCadFuncionario() throws SQLException {
         initComponents();
+        populaTabela("");
     }
 
    DefaultTableModel tmFuncionario = new DefaultTableModel(
             new Object [][]{
             },
-            new String[]{"nome"});
+            new String[]{"funcionario","nome"});
 
     private List<Funcionario> funcionarios;
     ListSelectionModel lsmFuncionario;
+
+    public void populaTabela(String busca) throws SQLException{
+
+        FuncionarioDao fd = new FuncionarioDao();
+        funcionarios = fd.getLista("%"+busca+"%");
+
+        for (Funcionario f1 : funcionarios) {
+            insereTabela(f1);
+        }
+    }
+
+    public void insereTabela(Funcionario f1){
+
+        tmFuncionario.addRow(new String[]{
+            String.valueOf(f1.getFuncionario()),
+            f1.getNome(),
+        });
+    }
+
+     private void novoCadastro(){
+
+        Funcionario f1 = new Funcionario();
+        f1.setCpf(cpf.getText());
+        f1.setNome(nome.getText());
+        f1.setEndereco(endereco.getText());
+        f1.setTelefone(telefone.getText());
+        f1.setSalario(Float.parseFloat(salario.getText()));
+        f1.setFuncao(funcao.getSelectedItem().toString());
+
+         try {
+            FuncionarioDao dao = new FuncionarioDao();
+            dao.adiciona(f1);
+
+            tmFuncionario.setNumRows(0);
+            populaTabela("");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(jFCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -89,6 +134,11 @@ public class jFCadFuncionario extends javax.swing.JFrame {
         jLabel6.setText("Salário:");
 
         salvar.setText("Salvar");
+        salvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                salvarActionPerformed(evt);
+            }
+        });
 
         cancelar.setText("Cancelar");
         cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -231,8 +281,16 @@ public class jFCadFuncionario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        dispose();
+        this.dispose();
     }//GEN-LAST:event_cancelarActionPerformed
+
+    private void salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salvarActionPerformed
+   //     if (verificaDados()){
+            novoCadastro();
+   //         limparCampos();
+   //         desabilitaDados();
+        //}
+    }//GEN-LAST:event_salvarActionPerformed
 
     /**
     * @param args the command line arguments
@@ -240,7 +298,7 @@ public class jFCadFuncionario extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jFCadFuncionario().setVisible(true);
+                //new jFCadFuncionario().setVisible(true);
             }
         });
     }

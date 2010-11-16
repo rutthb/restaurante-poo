@@ -13,7 +13,7 @@ package restaurantepoo.logica;
 public class NotaFiscalItens extends CupomFiscal{
 
     public NotaFiscalItens(double valorPago, String cpfCliente) {
-
+        super(valorPago, cpfCliente);
     }
 
     public NotaFiscalItens() {

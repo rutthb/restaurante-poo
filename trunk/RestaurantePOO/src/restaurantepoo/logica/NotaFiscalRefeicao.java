@@ -14,9 +14,11 @@ public class NotaFiscalRefeicao extends CupomFiscal{
     private int qtdRefeicoes;
 
     public NotaFiscalRefeicao(double valorPago, String cpfCliente) {
+        super(valorPago, cpfCliente);
     }
 
     public NotaFiscalRefeicao() {
+
     }
 
     public int getQtdRefeicoes() {
@@ -26,7 +28,6 @@ public class NotaFiscalRefeicao extends CupomFiscal{
     public void setQtdRefeicoes(int qtdRefeicoes) {
         this.qtdRefeicoes = qtdRefeicoes;
     }
-
 
     public void escreveDescricao(){
         Configuracao config = new Configuracao();

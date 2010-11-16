@@ -16,13 +16,13 @@ public class Produto {
     private double preco;
     private String descricao;
 
-    public Produto() {
-    }
+      public Produto() {
+      }
 
-    public Produto(String nome, double preco, String descricao) {
+    public Produto(String nome, String descricao , double preco) {
         this.nome = nome;
-        this.preco = preco;
         this.descricao = descricao;
+        this.preco = preco;
     }
 
     public String getDescricao() {

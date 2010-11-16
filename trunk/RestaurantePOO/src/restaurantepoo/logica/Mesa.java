@@ -5,7 +5,9 @@
 
 package restaurantepoo.logica;
 
-import sun.util.calendar.LocalGregorianCalendar.Date;
+import java.util.Date;
+
+
 
 /**
  *
@@ -18,17 +20,24 @@ import sun.util.calendar.LocalGregorianCalendar.Date;
 public class Mesa {
 
     private int mesa;
-    private int numero;
     private Date horaAbertura;
     private Date horaFechamento;
     private double valorTotal;
+    private boolean status;
 
     public Mesa() {
     }
 
-    public Mesa(int numero, Date horaAbertura) {
-        this.numero = numero;
-        this.horaAbertura = horaAbertura;
+    public Mesa(boolean status) {
+        this.status = status;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public Date getHoraAbertura() {
@@ -59,14 +68,6 @@ public class Mesa {
 
     public void setMesa(int mesa) {
         this.mesa = mesa;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
     }
 
     public double getValorTotal() {

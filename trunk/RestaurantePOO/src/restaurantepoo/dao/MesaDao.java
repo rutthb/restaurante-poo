@@ -6,8 +6,15 @@
 package restaurantepoo.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import restaurantepoo.bancodados.CriaConexao;
+import restaurantepoo.logica.Mesa;
 
 /**
  *
@@ -19,6 +26,99 @@ public class MesaDao {
 
     public MesaDao() throws SQLException{
         this.conexao = CriaConexao.getConexao();
+    }
+
+     public void adiciona(Mesa m1) throws SQLException{
+
+        String  sql = "insert into mesa (horaabertura, horafechamento, valortotal, status) " +
+                "values (?,?,?,?)";
+
+        PreparedStatement stmt = conexao.prepareStatement(sql);
+
+        // Seta os valores
+        stmt.setString(1, String.valueOf(m1.getHoraAbertura()));
+        stmt.setString(2, String.valueOf(m1.getHoraFechamento()));
+        stmt.setString(3, String.valueOf(m1.getValorTotal()));
+        stmt.setString(4, String.valueOf(m1.isStatus()));
+
+
+        // Executa o código SQL
+        stmt.execute();
+        stmt.close();
+    }
+
+        public void criaMesa(Mesa m1) throws SQLException{
+
+        String  sql = "insert into mesa (status) " +
+                "values (?)";
+
+        PreparedStatement stmt = conexao.prepareStatement(sql);
+
+        // Seta os valores
+        stmt.setString(1, String.valueOf(m1.isStatus()));
+
+
+        // Executa o código SQL
+        stmt.execute();
+        stmt.close();
+    }
+
+    public  List<Mesa> getLista(String busca) throws SQLException, ParseException{
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String sql = "Select * from mesa where mesa like ?";
+        PreparedStatement stmt = this.conexao.prepareStatement(sql);
+
+        stmt.setString(1, busca);       // inserção do caracter de busca.
+
+        ResultSet rs = stmt.executeQuery();
+
+        List<Mesa> minhaLista = new ArrayList<Mesa>();
+
+        while(rs.next()){
+            Mesa m1 = new Mesa();
+            m1.setMesa(rs.getInt("mesa"));
+            m1.setHoraAbertura(sdf.parse(rs.getString("horaabertura")));
+            m1.setHoraFechamento(sdf.parse(rs.getString("horafechamento")));
+            m1.setValorTotal(Double.parseDouble("valortotal"));
+            m1.setStatus(Boolean.parseBoolean("status"));
+
+
+            minhaLista.add(m1);
+        }
+
+        rs.close();
+        stmt.close();
+        return minhaLista;
+    }
+
+    public void altera(Mesa m1) throws SQLException{
+        String sql = "update mesa set horaabertura=?, horafechamento=?, valortotal=?, status=?" +
+                        " where mesa=?";
+
+        PreparedStatement stmt = conexao.prepareStatement(sql);
+
+        // Seta os valores
+
+        stmt.setString(1, String.valueOf(m1.getHoraAbertura()));
+        stmt.setString(2, String.valueOf(m1.getHoraFechamento()));
+        stmt.setString(3, String.valueOf(m1.getValorTotal()));
+        stmt.setString(4, String.valueOf(m1.isStatus()));
+
+        // Executa o código SQL
+        stmt.execute();
+        stmt.close();
+    }
+
+    public void remove(Mesa m1) throws SQLException{
+        String sql = "delete from mesa where mesa=?";
+        PreparedStatement stmt = conexao.prepareStatement(sql);
+
+        stmt.setString(1, String.valueOf(m1.getMesa()));
+
+        stmt.execute();
+        stmt.close();
     }
 
 }

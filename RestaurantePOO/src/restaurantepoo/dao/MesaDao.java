@@ -28,7 +28,7 @@ public class MesaDao {
         this.conexao = CriaConexao.getConexao();
     }
 
-     public void adiciona(Mesa m1) throws SQLException{
+    public void adiciona(Mesa m1) throws SQLException{
 
         String  sql = "insert into mesa (horaabertura, horafechamento, valortotal, status) " +
                 "values (?,?,?,?)";

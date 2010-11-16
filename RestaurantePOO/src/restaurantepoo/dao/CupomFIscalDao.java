@@ -6,8 +6,10 @@
 package restaurantepoo.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import restaurantepoo.bancodados.CriaConexao;
+import restaurantepoo.logica.CupomFiscal;
 
 /**
  *

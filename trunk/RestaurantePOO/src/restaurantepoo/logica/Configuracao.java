@@ -10,7 +10,6 @@ package restaurantepoo.logica;
  * @author Antonio
  */
 public class Configuracao {
-    private int configuracao;
     private String nome;
     private String telefone;
     private String endereco;
@@ -40,14 +39,6 @@ public class Configuracao {
 
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
-    }
-
-    public int getConfiguracao() {
-        return configuracao;
-    }
-
-    public void setConfiguracao(int configuracao) {
-        this.configuracao = configuracao;
     }
 
     public String getEndereco() {
@@ -106,14 +97,10 @@ public class Configuracao {
         this.descricaoRefeicao = descricaoRefeicao;
     }
 
-
-
     @Override
     public String toString() {
-        return "Configuracao{" + "configuracao=" + configuracao + "nome=" + nome + "telefone=" + telefone + "endereco=" + endereco + "cnpj=" + cnpj + "razaoSocial=" + razaoSocial + "inscEstadual=" + inscEstadual + "numeroMesas=" + numeroMesas + '}';
+        return "Configuracao{" + "nome=" + nome + "telefone=" + telefone + "endereco=" + endereco + "cnpj=" + cnpj + "razaoSocial=" + razaoSocial + "inscEstadual=" + inscEstadual + "numeroMesas=" + numeroMesas + "descricaoRefeicao=" + descricaoRefeicao + '}';
     }
-
-    
 
 
 }

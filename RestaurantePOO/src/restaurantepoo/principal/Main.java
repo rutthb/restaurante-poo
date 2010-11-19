@@ -11,6 +11,7 @@ import restaurantepoo.bancodados.CriaConexao;
 import restaurantepoo.dao.FuncionarioDao;
 import restaurantepoo.dao.ProdutoDao;
 import restaurantepoo.forms.jFCadFuncionario;
+import restaurantepoo.forms.jFCadProduto;
 import restaurantepoo.logica.Funcionario;
 import restaurantepoo.logica.Produto;
 
@@ -24,6 +25,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException{
-       new jFCadFuncionario().setVisible(true);
+       new jFCadProduto().setVisible(true);
+
     }
 }

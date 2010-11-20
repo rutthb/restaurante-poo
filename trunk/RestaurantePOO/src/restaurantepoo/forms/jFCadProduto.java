@@ -11,9 +11,13 @@
 
 package restaurantepoo.forms;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import restaurantepoo.dao.ProdutoDao;
 import restaurantepoo.logica.Produto;
 
 /**
@@ -23,8 +27,9 @@ import restaurantepoo.logica.Produto;
 public class jFCadProduto extends javax.swing.JFrame {
 
     /** Creates new form jFCadFuncionario */
-    public jFCadProduto() {
+    public jFCadProduto() throws SQLException {
         initComponents();
+        populaTabela("");
     }
 
    DefaultTableModel tmProduto = new DefaultTableModel(
@@ -34,6 +39,45 @@ public class jFCadProduto extends javax.swing.JFrame {
 
     private List<Produto> produtos;
     ListSelectionModel lsmProduto;
+
+
+     public void populaTabela(String busca) throws SQLException{
+
+        ProdutoDao pd = new ProdutoDao();
+        produtos = pd.getLista("%"+busca+"%");
+
+        for (Produto p1 : produtos) {
+            insereTabela(p1);
+        }
+    }
+
+    public void insereTabela(Produto p1){
+
+        tmProduto.addRow(new String[]{
+            String.valueOf(p1.getProduto()),
+            p1.getNome(),
+        });
+    }
+
+     private void novoCadastro(){
+
+        Produto p1 = new Produto();
+        p1.setNome(nome.getText());
+        p1.setDescricao(descricao.getText());
+        p1.setPreco(Float.parseFloat(preco.getText()));
+
+         try {
+            ProdutoDao dao = new ProdutoDao();
+            dao.adiciona(p1);
+
+            tmProduto.setNumRows(0);
+            populaTabela("");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(jFCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -190,7 +234,7 @@ public class jFCadProduto extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jFCadProduto().setVisible(true);
+               // new jFCadProduto().setVisible(true);
             }
         });
     }

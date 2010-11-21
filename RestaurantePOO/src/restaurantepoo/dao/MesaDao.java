@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import restaurantepoo.bancodados.CriaConexao;
 import restaurantepoo.logica.Mesa;
+import restaurantepoo.logica.Produto;
 
 /**
  *
@@ -47,7 +48,7 @@ public class MesaDao {
         stmt.close();
     }
 
-        public void criaMesa(Mesa m1) throws SQLException{
+    public void criaMesa(Mesa m1) throws SQLException{
 
         String  sql = "insert into mesa (status) " +
                 "values (?)";
@@ -61,6 +62,12 @@ public class MesaDao {
         // Executa o código SQL
         stmt.execute();
         stmt.close();
+    }
+
+    public void gravarProdutoMesa (Mesa m1,Produto p1){
+
+        m1.produtos.add(p1);
+
     }
 
     public  List<Mesa> getLista(String busca) throws SQLException, ParseException{

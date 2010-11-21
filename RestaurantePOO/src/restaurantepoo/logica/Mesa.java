@@ -5,6 +5,7 @@
 
 package restaurantepoo.logica;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -24,6 +25,7 @@ public class Mesa {
     private Date horaFechamento;
     private double valorTotal;
     private boolean status;
+    public ArrayList<Produto> produtos;
 
     public Mesa() {
     }

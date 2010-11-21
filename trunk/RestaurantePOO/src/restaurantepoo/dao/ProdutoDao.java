@@ -43,6 +43,25 @@ public class ProdutoDao {
         stmt.close();
     }
 
+
+    public void busca(Produto p1) throws SQLException{
+        String sql = "Select * from produto where produto like ?";
+        PreparedStatement stmt = this.conexao.prepareStatement(sql);
+
+        stmt.setString(1, String.valueOf(p1.getProduto()));       // inserção do caracter de busca.
+
+        ResultSet rs = stmt.executeQuery();
+
+        while(rs.next()){
+            p1.setNome(rs.getString("nome"));
+            p1.setPreco(Double.parseDouble(rs.getString("preco")));
+            p1.setDescricao(rs.getString("descricao"));
+        }
+
+        rs.close();
+        stmt.close();
+    }
+
     public  List<Produto> getLista(String busca) throws SQLException{
         String sql = "Select * from produto where nome like ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);

@@ -376,7 +376,6 @@ public class jFCadProduto extends javax.swing.JFrame {
 
         habilitaDados();
         escolherLinha();
-        // TODO add your handling code here:
     }//GEN-LAST:event_jTProdutoMouseClicked
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
@@ -512,7 +511,6 @@ public class jFCadProduto extends javax.swing.JFrame {
         jTNome.setEditable(true);
         jTPreco_venda.setEditable(true);
         jTTamanho.setEditable(true);
-
     }
 
     public boolean verificaDados(){

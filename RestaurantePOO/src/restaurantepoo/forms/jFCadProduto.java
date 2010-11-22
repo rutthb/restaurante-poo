@@ -257,7 +257,7 @@ public class jFCadProduto extends javax.swing.JFrame {
                 salvarActionPerformed(evt);
             }
         });
-        jPanel1.add(salvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 75, 25));
+        jPanel1.add(salvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 85, 25));
 
         cancelar.setText("Cancelar");
         cancelar.setNextFocusableComponent(nome);
@@ -266,7 +266,7 @@ public class jFCadProduto extends javax.swing.JFrame {
                 cancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(265, 320, 80, 25));
+        jPanel1.add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 85, 25));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18));
         jLabel7.setText("Cadastro de Produto");
@@ -304,7 +304,7 @@ public class jFCadProduto extends javax.swing.JFrame {
                 excluirActionPerformed(evt);
             }
         });
-        jPanel1.add(excluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 75, 25));
+        jPanel1.add(excluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 85, 25));
 
         descricao.setColumns(20);
         descricao.setRows(5);
@@ -313,7 +313,7 @@ public class jFCadProduto extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 240, -1));
 
-        editar.setText("Editar");
+        editar.setText("Atualizar");
         editar.setEnabled(false);
         editar.setMaximumSize(new java.awt.Dimension(63, 23));
         editar.setMinimumSize(new java.awt.Dimension(63, 23));
@@ -323,7 +323,7 @@ public class jFCadProduto extends javax.swing.JFrame {
                 editarActionPerformed(evt);
             }
         });
-        jPanel1.add(editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 75, 25));
+        jPanel1.add(editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 360, 85, 25));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Número:");

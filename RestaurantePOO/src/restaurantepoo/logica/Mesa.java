@@ -24,7 +24,7 @@ public class Mesa {
     private Date horaAbertura;
     private Date horaFechamento;
     private double valorTotal;
-    private boolean status;
+    private boolean status;     // 1 = livre e 0 = ocupada
     public ArrayList<Produto> produtos;
 
     public Mesa() {

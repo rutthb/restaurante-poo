@@ -7,11 +7,14 @@ package restaurantepoo.principal;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import restaurantepoo.bancodados.CriaConexao;
 import restaurantepoo.dao.FuncionarioDao;
+import restaurantepoo.dao.MesaDao;
 import restaurantepoo.dao.ProdutoDao;
 import restaurantepoo.forms.jFCadFuncionario;
 import restaurantepoo.forms.jFCadProduto;
+import restaurantepoo.forms.jFMesas;
 import restaurantepoo.logica.Funcionario;
 import restaurantepoo.logica.Produto;
 
@@ -24,8 +27,10 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws SQLException{
-       new jFCadProduto().setVisible(true);
-
+    public static void main(String[] args) throws SQLException, ParseException{
+       new jFMesas().setVisible(true);
+//       MesaDao dao = new MesaDao();
+//       for (int i=0; i<10;i++)
+//           dao.criaMesa();
     }
 }

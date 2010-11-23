@@ -87,17 +87,17 @@ public class jFCadFuncionario extends javax.swing.JFrame {
      }
 
      private void alteraCadastro (){
-            Funcionario f1 = new Funcionario();
-            f1.setFuncionario(Integer.parseInt(id.getText()));
-            preencherObjeto(f1);
+        Funcionario f1 = new Funcionario();
+        f1.setFuncionario(Integer.parseInt(id.getText()));
+        preencherObjeto(f1);
 
-            try {
-                    FuncionarioDao dao = new FuncionarioDao();
-                    dao.altera(f1);
-                    tmFuncionario.setNumRows(0);
-                    populaTabela("");
+        try {
+            FuncionarioDao dao = new FuncionarioDao();
+            dao.altera(f1);
+            tmFuncionario.setNumRows(0);
+            populaTabela("");
         } catch (SQLException ex) {
-                     Logger.getLogger(jFCadProduto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(jFCadProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
      }
 

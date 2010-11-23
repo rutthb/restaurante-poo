@@ -151,7 +151,7 @@ public class jFMesas extends javax.swing.JFrame {
                 sairActionPerformed(evt);
             }
         });
-        jPanel1.add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 330, 80, 30));
+        jPanel1.add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 320, 80, 30));
 
         cadProduto.setText("Cadastrar Produto");
         cadProduto.addActionListener(new java.awt.event.ActionListener() {
@@ -159,7 +159,7 @@ public class jFMesas extends javax.swing.JFrame {
                 cadProdutoActionPerformed(evt);
             }
         });
-        jPanel1.add(cadProduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 330, 130, 30));
+        jPanel1.add(cadProduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 150, 30));
 
         mesa.setEditable(false);
         jPanel1.add(mesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 60, -1));
@@ -169,14 +169,15 @@ public class jFMesas extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, 210));
 
+        cadFuncionario.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         cadFuncionario.setText("Cadastrar Funcionário");
-        jPanel1.add(cadFuncionario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 330, 130, 30));
+        jPanel1.add(cadFuncionario, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 150, 30));
 
         jButton1.setText("Fechar Mesa");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 280, 130, 30));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 320, 130, 30));
 
         jButton2.setText("Dividir Conta");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 280, 100, 30));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 280, 130, 30));
 
         jButton3.setText("Adicionar Produto");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -184,7 +185,7 @@ public class jFMesas extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, 130, 30));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 150, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 370));
 

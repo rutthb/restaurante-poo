@@ -104,4 +104,20 @@ public class FuncionarioDao {
         stmt.execute();
         stmt.close();
     }
+
+    public void busca(Funcionario f1) throws SQLException{
+        String sql = "Select * from funcionario where produto like ?";
+        PreparedStatement stmt = this.conexao.prepareStatement(sql);
+
+        stmt.setString(1, String.valueOf(f1.getFuncionario()));       // inserção do caracter de busca.
+
+        ResultSet rs = stmt.executeQuery();
+
+        while(rs.next()){
+            f1.setNome(rs.getString("nome"));
+        }
+
+        rs.close();
+        stmt.close();
+    }
 }

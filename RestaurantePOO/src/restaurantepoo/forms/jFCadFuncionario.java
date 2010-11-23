@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import restaurantepoo.dao.FuncionarioDao;
@@ -61,24 +62,118 @@ public class jFCadFuncionario extends javax.swing.JFrame {
      private void novoCadastro(){
 
         Funcionario f1 = new Funcionario();
+
+        preencherObjeto(f1);
+
+         try {
+            FuncionarioDao dao = new FuncionarioDao();
+            dao.adiciona(f1);
+            tmFuncionario.setNumRows(0);
+            populaTabela("");
+        } catch (SQLException ex) {
+            Logger.getLogger(jFCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
+     private void preencherObjeto(Funcionario f1){
+       
         f1.setCpf(cpf.getText());
         f1.setNome(nome.getText());
         f1.setEndereco(endereco.getText());
         f1.setTelefone(telefone.getText());
         f1.setSalario(Float.parseFloat(salario.getText()));
         f1.setFuncao(funcao.getSelectedItem().toString());
+          
+     }
 
-         try {
+     private void alteraCadastro (){
+            Funcionario f1 = new Funcionario();
+            f1.setFuncionario(Integer.parseInt(id.getText()));
+            preencherObjeto(f1);
+
+            try {
+                    FuncionarioDao dao = new FuncionarioDao();
+                    dao.altera(f1);
+                    tmFuncionario.setNumRows(0);
+                    populaTabela("");
+        } catch (SQLException ex) {
+                     Logger.getLogger(jFCadProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     }
+
+     private void limparCampos(){
+        id.setText("");
+        nome.setText("");
+        cpf.setText("");
+        endereco.setText("");
+        telefone.setText("");
+        funcao.setSelectedItem("Caixa");
+        salario.setText("");
+    }
+
+    private void escolherLinha(){
+
+        int linha = tabela.getSelectedRow();
+        System.out.println(linha);
+
+        Funcionario f1 = new Funcionario();
+        String temp;
+
+        temp = String.valueOf(tabela.getValueAt(linha, 0));
+        f1.setFuncionario(Integer.parseInt(temp));
+
+        preencherCampos(f1);
+
+    }
+
+    private void preencherCampos(Funcionario f1){
+        System.out.println(f1);
+
+        try {
             FuncionarioDao dao = new FuncionarioDao();
-            dao.adiciona(f1);
-
-            tmFuncionario.setNumRows(0);
-            populaTabela("");
-
+            dao.busca(f1);
         } catch (SQLException ex) {
             Logger.getLogger(jFCadFuncionario.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        System.out.println(f1);
+
+        id.setEditable(true);
+        id.setText(String.valueOf(f1.getFuncionario()));
+        id.setEditable(false);
+
+        nome.setText(f1.getNome());
+        cpf.setText(String.valueOf(f1.getCpf()));
+        endereco.setText(f1.getEndereco());
+        telefone.setText(f1.getTelefone());
+        funcao.setSelectedItem(f1.getFuncao());
+        salario.setText(String.valueOf(f1.getSalario()));
+
     }
+
+
+     private boolean verificaStrings(){
+
+        if (!nome.getText().equals("") && !cpf.getText().equals("") && !salario.getText().equals("") && !funcao.getSelectedItem().equals("")) {
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Campos obrigatórios não preenchidos");
+            return false;
+        }
+    }
+
+     private boolean verificaDouble(){
+        double temp;
+        try{
+            temp = Double.valueOf(salario.getText());
+            return true;
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Campo de salario deve ter o formato \"9999.99\"");
+            return false;
+        }
+    }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -113,49 +208,51 @@ public class jFCadFuncionario extends javax.swing.JFrame {
         atualizar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         endereco = new javax.swing.JTextArea();
+        jLabel9 = new javax.swing.JLabel();
+        id = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         nome.setNextFocusableComponent(cpf);
-        jPanel1.add(nome, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 270, -1));
+        jPanel1.add(nome, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 270, -1));
 
         cpf.setNextFocusableComponent(endereco);
-        jPanel1.add(cpf, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 146, -1));
+        jPanel1.add(cpf, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 146, -1));
 
         telefone.setNextFocusableComponent(funcao);
-        jPanel1.add(telefone, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 194, -1));
+        jPanel1.add(telefone, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, 194, -1));
 
         salario.setNextFocusableComponent(atualizar);
-        jPanel1.add(salario, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 310, 132, -1));
+        jPanel1.add(salario, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, 132, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("Nome:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("CPF:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Endereço:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel4.setText("Telefone:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel5.setText("Função:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel6.setText("Salário:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
         salvar.setText("Salvar");
         salvar.setNextFocusableComponent(cancelar);
@@ -164,7 +261,7 @@ public class jFCadFuncionario extends javax.swing.JFrame {
                 salvarActionPerformed(evt);
             }
         });
-        jPanel1.add(salvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 340, -1, -1));
+        jPanel1.add(salvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 350, -1, -1));
 
         cancelar.setText("Cancelar");
         cancelar.setNextFocusableComponent(nome);
@@ -173,25 +270,30 @@ public class jFCadFuncionario extends javax.swing.JFrame {
                 cancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 340, -1, -1));
+        jPanel1.add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 350, -1, -1));
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18));
         jLabel7.setText("Cadastro de Funcionário");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
 
         funcao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Caixa", "Garçon(ete)", "Gerente", "Cozinheiro(a)", "Lavador(a) de Pratos" }));
         funcao.setNextFocusableComponent(salario);
-        jPanel1.add(funcao, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 194, -1));
+        jPanel1.add(funcao, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, 194, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Personal-information-48.png"))); // NOI18N
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 49));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 49));
 
         tabela.setModel(tmFuncionario);
+        tabela.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabela);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, 213, 230));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel8.setText("Funcionários Existentes");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, -1, 22));
         jLabel8.getAccessibleContext().setAccessibleName("");
@@ -211,7 +313,7 @@ public class jFCadFuncionario extends javax.swing.JFrame {
                 atualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(atualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, -1, -1));
+        jPanel1.add(atualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 350, -1, -1));
 
         endereco.setColumns(20);
         endereco.setRows(5);
@@ -219,7 +321,18 @@ public class jFCadFuncionario extends javax.swing.JFrame {
         endereco.setNextFocusableComponent(telefone);
         jScrollPane2.setViewportView(endereco);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 140, 270, 100));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 150, 270, 100));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setText("Número:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 20));
+
+        id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idActionPerformed(evt);
+            }
+        });
+        jPanel1.add(id, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 60, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -251,6 +364,16 @@ public class jFCadFuncionario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_atualizarActionPerformed
 
+    private void idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idActionPerformed
+
+    private void tabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMouseClicked
+        escolherLinha();
+        atualizar.setEnabled(true);
+        salvar.setEnabled(false);
+    }//GEN-LAST:event_tabelaMouseClicked
+
     /**
     * @param args the command line arguments
     */
@@ -268,6 +391,7 @@ public class jFCadFuncionario extends javax.swing.JFrame {
     private javax.swing.JTextField cpf;
     private javax.swing.JTextArea endereco;
     private javax.swing.JComboBox funcao;
+    private javax.swing.JTextField id;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -277,6 +401,7 @@ public class jFCadFuncionario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

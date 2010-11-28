@@ -24,6 +24,5 @@ public class CriaConexao {
         } catch (ClassNotFoundException e) {
             throw new SQLException(e.getMessage());
         }
-
     }
 }

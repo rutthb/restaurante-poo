@@ -14,6 +14,7 @@ package restaurantepoo.forms;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,12 +49,14 @@ public class jFMesas extends javax.swing.JFrame {
             new String[]{"produto", "nome", "preco"}
      );
 
-    private List<Mesa> mesas;
+    public ArrayList<Mesa> mesas;
     ListSelectionModel lsmMesa;
     ListSelectionModel lsmProdutos;
 
-    private void populaTabelaMesas(String busca) throws SQLException, ParseException{
+    public void populaTabelaMesas(String busca) throws SQLException, ParseException{
 
+        tmMesa.setRowCount(0);
+        
         MesaDao pd = new MesaDao();
         mesas = pd.getLista("%"+busca+"%");
 
@@ -63,8 +66,9 @@ public class jFMesas extends javax.swing.JFrame {
 
     }
      
-     private void populaTabelaProdutos(){
+     public void populaTabelaProdutos(){
 
+        tmProduto.setRowCount(0);
         Mesa m1 = new Mesa();
         m1 = mesas.get(Integer.parseInt(mesa.getText()));
 
@@ -84,7 +88,7 @@ public class jFMesas extends javax.swing.JFrame {
 
     private void insereTabelaProdutos(Produto p1){
 
-        tmMesa.addRow(new String[]{
+    tmProduto.addRow(new String[]{
             String.valueOf(p1.getProduto()),
             p1.getNome(),
             String.valueOf(p1.getPreco())
@@ -99,7 +103,24 @@ public class jFMesas extends javax.swing.JFrame {
         }
     }
 
-    private void escolherLinha(){
+    public void calculaValorTotal(Mesa m){
+        double soma =0;
+
+        for (Produto p1 : m.produtos) {
+            soma += p1.getPreco();
+        }
+        
+        m.setValorTotal(soma);
+        try {
+            MesaDao dao = new MesaDao();
+            dao.alteraValorTotal(m);
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private int escolherLinha(){
 
         int linha = tabelaMesas.getSelectedRow();
         //System.out.println(linha);
@@ -108,7 +129,7 @@ public class jFMesas extends javax.swing.JFrame {
 
         temp = String.valueOf(tabelaMesas.getValueAt(linha, 0));
         mesa.setText(temp);
-
+        return linha;
     }
 
     /** This method is called from within the constructor to
@@ -126,7 +147,7 @@ public class jFMesas extends javax.swing.JFrame {
         cadProduto = new javax.swing.JButton();
         mesa = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        produtos = new javax.swing.JTable();
         cadFuncionario = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -153,6 +174,7 @@ public class jFMesas extends javax.swing.JFrame {
         });
         jPanel1.add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 320, 80, 30));
 
+        cadProduto.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         cadProduto.setText("Cadastrar Produto");
         cadProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,10 +186,10 @@ public class jFMesas extends javax.swing.JFrame {
         mesa.setEditable(false);
         jPanel1.add(mesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 60, -1));
 
-        jTable1.setModel(tmProduto);
-        jScrollPane2.setViewportView(jTable1);
+        produtos.setModel(tmProduto);
+        jScrollPane2.setViewportView(produtos);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, 210));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 60, 460, 210));
 
         cadFuncionario.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         cadFuncionario.setText("Cadastrar Funcionário");
@@ -235,15 +257,18 @@ public class jFMesas extends javax.swing.JFrame {
 
     private void tabelaMesasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMesasMouseClicked
         //habilitaDados();
-        escolherLinha();
+        int linha;
+        linha = escolherLinha();
         populaTabelaProdutos();
+        System.out.println(linha);
 //        editar.setEnabled(true);
 //        excluir.setEnabled(true);
 //        salvar.setEnabled(false);
     }//GEN-LAST:event_tabelaMesasMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        new jFAdicionaProduto(mesas.get(Integer.parseInt(mesa.getText()))).setVisible(true);
+        new jFAdicionaProduto(this, Integer.parseInt(mesa.getText())).setVisible(true);
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -267,8 +292,8 @@ public class jFMesas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField mesa;
+    private javax.swing.JTable produtos;
     private javax.swing.JButton sair;
     private javax.swing.JTable tabelaMesas;
     // End of variables declaration//GEN-END:variables

@@ -28,6 +28,7 @@ public class Mesa {
     public ArrayList<Produto> produtos;
 
     public Mesa() {
+        produtos = new ArrayList<Produto>();
     }
 
     public Mesa(boolean status) {

@@ -70,7 +70,7 @@ public class MesaDao {
 
     }
 
-    public  List<Mesa> getLista(String busca) throws SQLException, ParseException{
+    public  ArrayList<Mesa> getLista(String busca) throws SQLException, ParseException{
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -81,7 +81,7 @@ public class MesaDao {
 
         ResultSet rs = stmt.executeQuery();
 
-        List<Mesa> minhaLista = new ArrayList<Mesa>();
+        ArrayList<Mesa> minhaLista = new ArrayList<Mesa>();
 
         while(rs.next()){
             Mesa m1 = new Mesa();
@@ -112,6 +112,21 @@ public class MesaDao {
         stmt.setString(2, String.valueOf(m1.getHoraFechamento()));
         stmt.setString(3, String.valueOf(m1.getValorTotal()));
         stmt.setString(4, String.valueOf(m1.isStatus()));
+
+        // Executa o código SQL
+        stmt.execute();
+        stmt.close();
+    }
+
+    public void alteraValorTotal(Mesa m1) throws SQLException{
+        String sql = "update mesa set valortotal=? where mesa=?";
+
+        PreparedStatement stmt = conexao.prepareStatement(sql);
+
+        // Seta os valores
+
+        stmt.setString(1, String.valueOf(m1.getValorTotal()));
+        stmt.setString(2, String.valueOf(m1.getMesa()));
 
         // Executa o código SQL
         stmt.execute();

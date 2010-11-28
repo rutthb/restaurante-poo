@@ -8,10 +8,10 @@
  *
  * Created on 21/11/2010, 20:31:13
  */
-
 package restaurantepoo.forms;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,50 +29,45 @@ import restaurantepoo.logica.Produto;
 public class jFAdicionaProduto extends javax.swing.JFrame {
 
     /** Creates new form jFAdicionaProduto */
-    public jFAdicionaProduto(Mesa m) {
+    public jFAdicionaProduto(jFMesas owner, int numeroMesa) {
         initComponents();
-        m1 = m;
-        System.out.println(m.toString());
+        this.owner = owner;
+        m1 = owner.mesas.get(numeroMesa);
+        System.out.println(m1.toString());
     }
-
-   DefaultTableModel tmProduto = new DefaultTableModel(
-            new Object [][]{
-            },
+    DefaultTableModel tmProduto = new DefaultTableModel(
+            new Object[][]{},
             new String[]{"produto", "nome", "preco"});
-
     private List<Produto> produtos;
     Mesa m1;
+    jFMesas owner;
     Produto p = new Produto();
     ListSelectionModel lsmProduto;
 
-
-
-    private void populaTabela(String busca) throws SQLException{
-
+    private void populaTabela(String busca) throws SQLException {
         ProdutoDao pd = new ProdutoDao();
-        produtos = pd.getLista("%"+busca+"%");
+        produtos = pd.getLista("%" + busca + "%");
 
         for (Produto p1 : produtos) {
             insereTabela(p1);
         }
     }
 
-    private void insereTabela(Produto p1){
+    private void insereTabela(Produto p1) {
 
         tmProduto.addRow(new String[]{
-            String.valueOf(p1.getProduto()),
-            p1.getNome(),
-            String.valueOf(p1.getPreco())
-        });
+                    String.valueOf(p1.getProduto()),
+                    p1.getNome(),
+                    String.valueOf(p1.getPreco())
+                });
     }
 
-
-    private void limparCampos(){
+    private void limparCampos() {
         quantidade.setText("");
         codigo.setText("");
     }
 
-    private boolean verificaStrings(){
+    private boolean verificaStrings() {
 
         if (!codigo.getText().equals("") && !quantidade.getText().equals("")) {
             return true;
@@ -82,20 +77,19 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         }
     }
 
-    private boolean verificaInteiro(){
+    private boolean verificaInteiro() {
         int temp;
-        try{
+        try {
             temp = Integer.parseInt(quantidade.getText());
             temp = Integer.parseInt(codigo.getText());
             return true;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Campos código e quantidade devem ser inteiros");
             return false;
         }
     }
 
-    private void escolherLinha(){
+    private void escolherLinha() {
 
         int linha = tabelaProdutos.getSelectedRow();
 
@@ -108,15 +102,13 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
 
     }
 
-    private void populaObjeto(Produto p1){
-
+    private void populaObjeto(Produto p1) {
         try {
             ProdutoDao dao = new ProdutoDao();
             dao.busca(p1);
         } catch (SQLException ex) {
             Logger.getLogger(jFCadProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     /** This method is called from within the constructor to
@@ -228,22 +220,37 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaProdutosMouseClicked
 
     private void inserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirActionPerformed
-        if(verificaStrings() && verificaInteiro()){
+if (verificaStrings() && verificaInteiro()) {
             populaObjeto(p);
+
+            for (int i = 0; i < Integer.parseInt(quantidade.getText()); i++) {
+                m1.produtos.add(p);
+            }
             System.out.println(p.toString());
-            m1.produtos.add(p);
         }
     }//GEN-LAST:event_inserirActionPerformed
 
     private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
+        owner.calculaValorTotal(m1);
+        System.out.println("Valor total recalculado: " + m1.getValorTotal());
+
+        try {
+            owner.populaTabelaMesas("");
+        } catch (SQLException ex) {
+            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        owner.populaTabelaProdutos();
         dispose();
     }//GEN-LAST:event_voltarActionPerformed
 
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
             }
         });

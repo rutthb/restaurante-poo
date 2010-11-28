@@ -30,11 +30,11 @@ public class Main {
      */
     public static void main(String[] args) throws SQLException, ParseException{
            //new jFCadProduto().setVisible(true);
-           new jFCadFuncionario().setVisible(true);
+//           new jFCadFuncionario().setVisible(true);
 
-        // new jFMesas().setVisible(true);
-//       MesaDao dao = new MesaDao();
-//       for (int i=0; i<10;i++)
-//           dao.criaMesa();
+        new jFMesas().setVisible(true);
+//        MesaDao dao = new MesaDao();
+//        for (int i=0; i<10;i++)
+//        dao.criaMesa();
     }
 }

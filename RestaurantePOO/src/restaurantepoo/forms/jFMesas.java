@@ -50,6 +50,7 @@ public class jFMesas extends javax.swing.JFrame {
      );
 
     public ArrayList<Mesa> mesas;
+    Mesa mesa;
     ListSelectionModel lsmMesa;
     ListSelectionModel lsmProdutos;
 
@@ -57,22 +58,19 @@ public class jFMesas extends javax.swing.JFrame {
 
         tmMesa.setRowCount(0);
         
-        MesaDao pd = new MesaDao();
-        mesas = pd.getLista("%"+busca+"%");
+        MesaDao dao = new MesaDao();
+        mesas = dao.getLista("%"+busca+"%");
 
-        for (Mesa p1 : mesas) {
-            insereTabelaMesas(p1);
+        for (Mesa m1 : mesas) {
+            insereTabelaMesas(m1);
         }
 
     }
      
      public void populaTabelaProdutos(){
-
         tmProduto.setRowCount(0);
-        Mesa m1 = new Mesa();
-        m1 = mesas.get(Integer.parseInt(mesa.getText()));
-
-        for (Produto p1 : m1.produtos) {
+        System.out.println("Numero da mesa escolhido:" + mesa.getMesa());
+        for (Produto p1 : mesa.produtos) {
             insereTabelaProdutos(p1);
         }
     }
@@ -88,32 +86,42 @@ public class jFMesas extends javax.swing.JFrame {
 
     private void insereTabelaProdutos(Produto p1){
 
-    tmProduto.addRow(new String[]{
+        tmProduto.addRow(new String[]{
             String.valueOf(p1.getProduto()),
             p1.getNome(),
             String.valueOf(p1.getPreco())
         });
     }
 
-    private void criaMesas(int n){
-        for (int i=0; i<n; i++){
+    private void criaMesas(int n) throws SQLException{
+        for (int i=0; i<=n; i++){
             Mesa m = new Mesa();
             m.setMesa(i);
             mesas.add(m);
+            //criaMesasBanco(m);    Linha só é utilizada para criar as mesas no banco de dados.
         }
     }
 
-    public void calculaValorTotal(Mesa m){
+    private void criaMesasBanco(Mesa m1) throws SQLException{
+        MesaDao dao = new MesaDao();
+        dao.criaMesa(m1);
+    }
+
+    public void calculaValorTotal(){
         double soma =0;
 
-        for (Produto p1 : m.produtos) {
+        int linha;
+        linha = escolherLinha();
+        mesa = mesas.get(linha);
+
+        for (Produto p1 : mesa.produtos) {
             soma += p1.getPreco();
         }
         
-        m.setValorTotal(soma);
+        mesa.setValorTotal(soma);
         try {
             MesaDao dao = new MesaDao();
-            dao.alteraValorTotal(m);
+            dao.alteraValorTotal(mesa);
         } catch (SQLException ex) {
             Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -123,12 +131,12 @@ public class jFMesas extends javax.swing.JFrame {
     private int escolherLinha(){
 
         int linha = tabelaMesas.getSelectedRow();
-        //System.out.println(linha);
+        System.out.println("linha:"+linha);
 
         String temp;
 
         temp = String.valueOf(tabelaMesas.getValueAt(linha, 0));
-        mesa.setText(temp);
+        numeroMesa.setText(temp);
         return linha;
     }
 
@@ -145,13 +153,13 @@ public class jFMesas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         sair = new javax.swing.JButton();
         cadProduto = new javax.swing.JButton();
-        mesa = new javax.swing.JTextField();
+        numeroMesa = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         produtos = new javax.swing.JTable();
         cadFuncionario = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        adicionaProduto = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaMesas = new javax.swing.JTable();
@@ -183,8 +191,8 @@ public class jFMesas extends javax.swing.JFrame {
         });
         jPanel1.add(cadProduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 150, 30));
 
-        mesa.setEditable(false);
-        jPanel1.add(mesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 60, -1));
+        numeroMesa.setEditable(false);
+        jPanel1.add(numeroMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 60, -1));
 
         produtos.setModel(tmProduto);
         jScrollPane2.setViewportView(produtos);
@@ -201,13 +209,13 @@ public class jFMesas extends javax.swing.JFrame {
         jButton2.setText("Dividir Conta");
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 280, 130, 30));
 
-        jButton3.setText("Adicionar Produto");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        adicionaProduto.setText("Adicionar Produto");
+        adicionaProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                adicionaProdutoActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 150, 30));
+        jPanel1.add(adicionaProduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 150, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 370));
 
@@ -259,17 +267,19 @@ public class jFMesas extends javax.swing.JFrame {
         //habilitaDados();
         int linha;
         linha = escolherLinha();
-        populaTabelaProdutos();
-        System.out.println(linha);
+        mesa = mesas.get(linha);
+        calculaValorTotal();
+        populaTabelaProdutos();  // numero da mesa é igual ao numero da mesa +1
+
+
 //        editar.setEnabled(true);
 //        excluir.setEnabled(true);
 //        salvar.setEnabled(false);
     }//GEN-LAST:event_tabelaMesasMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        new jFAdicionaProduto(this, Integer.parseInt(mesa.getText())).setVisible(true);
-
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void adicionaProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaProdutoActionPerformed
+        new jFAdicionaProduto(this, Integer.parseInt(numeroMesa.getText())).setVisible(true);
+    }//GEN-LAST:event_adicionaProdutoActionPerformed
 
     /**
     * @param args the command line arguments
@@ -282,17 +292,17 @@ public class jFMesas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionaProduto;
     private javax.swing.JButton cadFuncionario;
     private javax.swing.JButton cadProduto;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField mesa;
+    private javax.swing.JTextField numeroMesa;
     private javax.swing.JTable produtos;
     private javax.swing.JButton sair;
     private javax.swing.JTable tabelaMesas;

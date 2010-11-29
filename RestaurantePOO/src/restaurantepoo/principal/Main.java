@@ -33,8 +33,6 @@ public class Main {
 //           new jFCadFuncionario().setVisible(true);
 
         new jFMesas().setVisible(true);
-//        MesaDao dao = new MesaDao();
-//        for (int i=0; i<10;i++)
-//        dao.criaMesa();
+
     }
 }

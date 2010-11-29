@@ -25,7 +25,7 @@ public class Mesa {
     private Date horaFechamento;
     private double valorTotal;
     private boolean status;     // 1 = livre e 0 = ocupada
-    public ArrayList<Produto> produtos;
+    public  ArrayList<Produto> produtos;
 
     public Mesa() {
         produtos = new ArrayList<Produto>();
@@ -33,6 +33,14 @@ public class Mesa {
 
     public Mesa(boolean status) {
         this.status = status;
+    }
+
+    public void addProduto(Produto p){
+        produtos.add(p);
+    }
+
+    public Produto getProduto(int i){
+        return produtos.get(i);
     }
 
     public boolean isStatus() {
@@ -59,12 +67,6 @@ public class Mesa {
         this.horaFechamento = horaFechamento;
     }
 
-    /**
-     * Consulta ao banco de dados para saber o numero de sequência de
-     * abertura da mesa utlizada
-     *
-     * @return inteiro
-     */
     public int getMesa() {
         return mesa;
     }
@@ -79,6 +81,11 @@ public class Mesa {
 
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    @Override
+    public String toString() {
+        return "\nMesa{" + "\nmesa=" + mesa + "\nhoraAbertura=" + horaAbertura + "\nhoraFechamento=" + horaFechamento + "\nvalorTotal=" + valorTotal + "\nstatus=" + status + "\nprodutos=" + produtos + '}';
     }
 
 

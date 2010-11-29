@@ -10,6 +10,7 @@
  */
 package restaurantepoo.forms;
 
+import java.security.acl.Owner;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -29,20 +30,25 @@ import restaurantepoo.logica.Produto;
 public class jFAdicionaProduto extends javax.swing.JFrame {
 
     /** Creates new form jFAdicionaProduto */
-    public jFAdicionaProduto(jFMesas owner, int numeroMesa) {
+    public  jFAdicionaProduto(jFMesas owner, int numeroMesa) {
         initComponents();
-        this.owner = owner;
-        m1 = owner.mesas.get(numeroMesa);
+        //this.son = owner;
+        m1 = owner.mesas.get(numeroMesa-1);     // posição da mensa no array é seu numero -1
         System.out.println(m1.toString());
+
     }
     DefaultTableModel tmProduto = new DefaultTableModel(
             new Object[][]{},
-            new String[]{"produto", "nome", "preco"});
+            new String[]{"produto", "nome", "preco"}
+    );
+
     private List<Produto> produtos;
     Mesa m1;
-    jFMesas owner;
+    jFMesas son;
     Produto p = new Produto();
     ListSelectionModel lsmProduto;
+
+
 
     private void populaTabela(String busca) throws SQLException {
         ProdutoDao pd = new ProdutoDao();
@@ -103,6 +109,9 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
     }
 
     private void populaObjeto(Produto p1) {
+        
+        p1.setProduto(Integer.parseInt(codigo.getText()));
+
         try {
             ProdutoDao dao = new ProdutoDao();
             dao.busca(p1);
@@ -220,28 +229,29 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaProdutosMouseClicked
 
     private void inserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirActionPerformed
-if (verificaStrings() && verificaInteiro()) {
+        if (verificaStrings() && verificaInteiro()) {
             populaObjeto(p);
 
             for (int i = 0; i < Integer.parseInt(quantidade.getText()); i++) {
-                m1.produtos.add(p);
+                m1.addProduto(p);
             }
-            System.out.println(p.toString());
+
+            System.out.println(m1.toString());
         }
     }//GEN-LAST:event_inserirActionPerformed
 
     private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
-        owner.calculaValorTotal(m1);
-        System.out.println("Valor total recalculado: " + m1.getValorTotal());
-
-        try {
-            owner.populaTabelaMesas("");
-        } catch (SQLException ex) {
-            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        owner.populaTabelaProdutos();
+//        son.calculaValorTotal();
+//        System.out.println("Valor total recalculado: " + m1.getValorTotal());
+//
+//        try {
+//            son.populaTabelaMesas("");
+//        } catch (SQLException ex) {
+//            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ParseException ex) {
+//            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        son.populaTabelaProdutos(m1);
         dispose();
     }//GEN-LAST:event_voltarActionPerformed
 
@@ -250,8 +260,8 @@ if (verificaStrings() && verificaInteiro()) {
      */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
-
             public void run() {
+
             }
         });
     }

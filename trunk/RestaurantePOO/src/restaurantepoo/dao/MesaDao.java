@@ -48,16 +48,17 @@ public class MesaDao {
         stmt.close();
     }
 
-    public void criaMesa() throws SQLException{
+    public void criaMesa(Mesa m1) throws SQLException{
 
-        String  sql = "insert into mesa (status,valortotal) " +
-                "values (?,?)";
+        String  sql = "insert into mesa (mesa,status,valortotal) " +
+                "values (?,?,?)";
 
         PreparedStatement stmt = conexao.prepareStatement(sql);
 
         // Seta os valores
-        stmt.setBoolean(1, true);
-        stmt.setDouble(2, 0.1);
+        stmt.setInt(1, m1.getMesa());
+        stmt.setBoolean(2, true);
+        stmt.setDouble(3, 0.0);
 
         // Executa o código SQL
         stmt.execute();
@@ -66,7 +67,7 @@ public class MesaDao {
 
     public void gravarProdutoMesa (Mesa m1,Produto p1){
 
-        m1.produtos.add(p1);
+        m1.addProduto(p1);
 
     }
 

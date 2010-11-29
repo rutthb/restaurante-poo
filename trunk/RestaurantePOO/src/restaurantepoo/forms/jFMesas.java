@@ -56,6 +56,7 @@ public class jFMesas extends javax.swing.JFrame {
 
     public void populaTabelaMesas(String busca) throws SQLException, ParseException{
 
+        ArrayList<Mesa> mesas = new ArrayList<Mesa>();
         tmMesa.setRowCount(0);
         
         MesaDao dao = new MesaDao();
@@ -279,6 +280,16 @@ public class jFMesas extends javax.swing.JFrame {
 
     private void adicionaProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaProdutoActionPerformed
         new jFAdicionaProduto(this, Integer.parseInt(numeroMesa.getText())).setVisible(true);
+        try {
+            populaTabelaMesas("");
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        mesa = mesas.get(Integer.parseInt(numeroMesa.getText()));
+        populaTabelaProdutos();
     }//GEN-LAST:event_adicionaProdutoActionPerformed
 
     /**

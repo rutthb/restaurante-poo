@@ -49,23 +49,22 @@ public class jFMesas extends javax.swing.JFrame {
             new String[]{"produto", "nome", "preco"}
      );
 
-    public ArrayList<Mesa> mesas;
+    public ArrayList<Mesa> mesas = new ArrayList<Mesa>();
     Mesa mesa;
     ListSelectionModel lsmMesa;
     ListSelectionModel lsmProdutos;
 
     public void populaTabelaMesas(String busca) throws SQLException, ParseException{
 
-        ArrayList<Mesa> mesas = new ArrayList<Mesa>();
+        ArrayList<Mesa> mesaBanco = new ArrayList<Mesa>();
         tmMesa.setRowCount(0);
         
         MesaDao dao = new MesaDao();
-        mesas = dao.getLista("%"+busca+"%");
+        mesaBanco = dao.getLista("%"+busca+"%");
 
-        for (Mesa m1 : mesas) {
+        for (Mesa m1 : mesaBanco) {
             insereTabelaMesas(m1);
         }
-
     }
      
      public void populaTabelaProdutos(){
@@ -112,7 +111,7 @@ public class jFMesas extends javax.swing.JFrame {
         double soma =0;
 
         int linha;
-        linha = escolherLinha();
+        linha = Integer.parseInt(numeroMesa.getText());
         mesa = mesas.get(linha);
 
         for (Produto p1 : mesa.produtos) {
@@ -262,6 +261,7 @@ public class jFMesas extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_cadProdutoActionPerformed
 
     private void tabelaMesasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMesasMouseClicked
@@ -279,17 +279,15 @@ public class jFMesas extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaMesasMouseClicked
 
     private void adicionaProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaProdutoActionPerformed
-        new jFAdicionaProduto(this, Integer.parseInt(numeroMesa.getText())).setVisible(true);
+        System.out.println("Entrando no Forme de adicionar Produtos...");
+
         try {
-            populaTabelaMesas("");
+            new jFAdicionaProduto(this,mesa).setVisible(true);
         } catch (SQLException ex) {
-            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
             Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        mesa = mesas.get(Integer.parseInt(numeroMesa.getText()));
-        populaTabelaProdutos();
+        System.out.println("Voltando do Forme de adicionar Produtos...");
     }//GEN-LAST:event_adicionaProdutoActionPerformed
 
     /**

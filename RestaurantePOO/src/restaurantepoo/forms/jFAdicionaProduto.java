@@ -13,12 +13,15 @@ package restaurantepoo.forms;
 import java.security.acl.Owner;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import restaurantepoo.dao.MesaDao;
+import restaurantepoo.dao.MesaProdutoDao;
 import restaurantepoo.dao.ProdutoDao;
 import restaurantepoo.logica.Mesa;
 import restaurantepoo.logica.Produto;
@@ -30,12 +33,12 @@ import restaurantepoo.logica.Produto;
 public class jFAdicionaProduto extends javax.swing.JFrame {
 
     /** Creates new form jFAdicionaProduto */
-    public  jFAdicionaProduto(jFMesas owner, int numeroMesa) {
+    public  jFAdicionaProduto(jFMesas owner, Mesa m) throws SQLException {
         initComponents();
-        //this.son = owner;
-        m1 = owner.mesas.get(numeroMesa-1);     // posição da mensa no array é seu numero -1
-        System.out.println(m1.toString());
-
+        m1 = m;
+        son = owner;
+        numeroMesa.setText(String.valueOf(m1.getMesa()));
+        populaTabela("");
     }
     DefaultTableModel tmProduto = new DefaultTableModel(
             new Object[][]{},
@@ -45,10 +48,7 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
     private List<Produto> produtos;
     Mesa m1;
     jFMesas son;
-    Produto p = new Produto();
     ListSelectionModel lsmProduto;
-
-
 
     private void populaTabela(String busca) throws SQLException {
         ProdutoDao pd = new ProdutoDao();
@@ -96,16 +96,11 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
     }
 
     private void escolherLinha() {
-
         int linha = tabelaProdutos.getSelectedRow();
-
         String temp;
 
         temp = String.valueOf(tabelaProdutos.getValueAt(linha, 0));
-        p.setProduto(Integer.parseInt(temp));
-
-        codigo.setText(String.valueOf(p.getProduto()));
-
+        codigo.setText(temp);
     }
 
     private void populaObjeto(Produto p1) {
@@ -117,6 +112,20 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
             dao.busca(p1);
         } catch (SQLException ex) {
             Logger.getLogger(jFCadProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void atualizarFrameMesas(){
+        son.calculaValorTotal();
+        son.populaTabelaProdutos();
+
+        System.out.println("Valor total recalculado: " + m1.getValorTotal());
+        try {
+            son.populaTabelaMesas("");
+        } catch (SQLException ex) {
+            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -142,13 +151,15 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         codigo = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        numeroMesa = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        buscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        buscar.setFont(new java.awt.Font("Tahoma", 0, 14));
         buscar.setText("Buscar");
         buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,10 +178,10 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 530, 230));
 
-        campoBusca.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        campoBusca.setFont(new java.awt.Font("Tahoma", 0, 14));
         jPanel1.add(campoBusca, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 240, 20));
 
-        inserir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        inserir.setFont(new java.awt.Font("Tahoma", 0, 14));
         inserir.setText("Inserir");
         inserir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,7 +190,7 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         });
         jPanel1.add(inserir, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 340, 90, 30));
 
-        voltar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        voltar.setFont(new java.awt.Font("Tahoma", 0, 14));
         voltar.setText("Voltar");
         voltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,27 +199,36 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         });
         jPanel1.add(voltar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 340, 80, 30));
 
-        quantidade.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        quantidade.setFont(new java.awt.Font("Tahoma", 0, 14));
         jPanel1.add(quantidade, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 340, 60, -1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Quantidade:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 90, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18));
         jLabel2.setText("Busca por Produtos");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel3.setText("Nome:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel4.setText("Código:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, -1, -1));
 
-        codigo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        codigo.setFont(new java.awt.Font("Tahoma", 0, 14));
         jPanel1.add(codigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, 60, -1));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setText("MESA:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+
+        numeroMesa.setEditable(false);
+        numeroMesa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        numeroMesa.setBorder(null);
+        jPanel1.add(numeroMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 40, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 380));
 
@@ -230,28 +250,34 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
 
     private void inserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirActionPerformed
         if (verificaStrings() && verificaInteiro()) {
-            populaObjeto(p);
 
+            Produto p = new Produto();
+            p.setProduto(Integer.parseInt(codigo.getText()));
+
+            populaObjeto(p);
+            MesaProdutoDao dao;
+            
             for (int i = 0; i < Integer.parseInt(quantidade.getText()); i++) {
                 m1.addProduto(p);
             }
 
+            try {
+                dao = new MesaProdutoDao();
+     //           dao.inserirProduto(numeroMesa.getText(), Integer.parseInt(quantidade.getText()), p);
+            } catch (SQLException ex) {
+                Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             System.out.println(m1.toString());
+            atualizarFrameMesas();
+
         }
     }//GEN-LAST:event_inserirActionPerformed
 
     private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
-//        son.calculaValorTotal();
-//        System.out.println("Valor total recalculado: " + m1.getValorTotal());
-//
-//        try {
-//            son.populaTabelaMesas("");
-//        } catch (SQLException ex) {
-//            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (ParseException ex) {
-//            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        son.populaTabelaProdutos(m1);
+
+        atualizarFrameMesas();
+        
         dispose();
     }//GEN-LAST:event_voltarActionPerformed
 
@@ -275,8 +301,10 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField numeroMesa;
     private javax.swing.JTextField quantidade;
     private javax.swing.JTable tabelaProdutos;
     private javax.swing.JButton voltar;

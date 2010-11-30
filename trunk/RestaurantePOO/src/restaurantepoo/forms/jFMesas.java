@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import restaurantepoo.dao.MesaDao;
+import restaurantepoo.dao.MesaProdutoDao;
 import restaurantepoo.logica.Mesa;
 import restaurantepoo.logica.Produto;
 
@@ -46,7 +47,7 @@ public class jFMesas extends javax.swing.JFrame {
      DefaultTableModel tmProduto = new DefaultTableModel(
             new Object [][]{
             },
-            new String[]{"produto", "nome", "preco"}
+            new String[]{"produto", "nome", "preco", "quantidade", "total item"}
      );
 
     public ArrayList<Mesa> mesas = new ArrayList<Mesa>();
@@ -73,6 +74,32 @@ public class jFMesas extends javax.swing.JFrame {
         for (Produto p1 : mesa.produtos) {
             insereTabelaProdutos(p1);
         }
+    }
+    public void populaTabelaProdutosBanco() throws SQLException {
+        tmProduto.setRowCount(0);
+
+        MesaProdutoDao dao = new MesaProdutoDao();
+        Mesa m1 = new Mesa();
+        Double somaTotal = 0.0;
+
+        dao.getListaProdutosMesa(numeroMesa.getText(), m1);
+
+        for (int i = 0; i < m1.produtos.size(); i++) {
+            
+            double preco = m1.produtos.get(i).getPreco();
+            int qtd = Integer.parseInt(m1.quantidade.get(i));
+            Double soma = qtd*preco;
+            somaTotal += soma;
+
+            tmProduto.addRow(new String[]{
+                        String.valueOf(m1.produtos.get(i).getProduto()),
+                        m1.produtos.get(i).getNome(),
+                        String.valueOf(preco),
+                        String.valueOf(qtd),
+                        String.valueOf(soma)
+                    });
+        }
+        salvaValorTotal(somaTotal);
     }
 
     private void insereTabelaMesas(Mesa m1){
@@ -105,6 +132,20 @@ public class jFMesas extends javax.swing.JFrame {
     private void criaMesasBanco(Mesa m1) throws SQLException{
         MesaDao dao = new MesaDao();
         dao.criaMesa(m1);
+    }
+
+    public void salvaValorTotal(Double total){
+        Mesa m1 = new Mesa();
+        m1.setValorTotal(total);
+        m1.setMesa(Integer.parseInt(numeroMesa.getText()));
+
+        try {
+            MesaDao dao = new MesaDao();
+            dao.alteraValorTotal(m1);
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public void calculaValorTotal(){
@@ -269,20 +310,21 @@ public class jFMesas extends javax.swing.JFrame {
         int linha;
         linha = escolherLinha();
         mesa = mesas.get(linha);
-        calculaValorTotal();
-        populaTabelaProdutos();  // numero da mesa é igual ao numero da mesa +1
+        //calculaValorTotal();
+        //populaTabelaProdutos();  // numero da mesa é igual ao numero da mesa +1
+        try {
+            populaTabelaProdutosBanco();
 
-
-//        editar.setEnabled(true);
-//        excluir.setEnabled(true);
-//        salvar.setEnabled(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_tabelaMesasMouseClicked
 
     private void adicionaProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionaProdutoActionPerformed
         System.out.println("Entrando no Forme de adicionar Produtos...");
 
         try {
-            new jFAdicionaProduto(this,mesa).setVisible(true);
+            new jFAdicionaProduto(this,numeroMesa.getText()).setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
         }

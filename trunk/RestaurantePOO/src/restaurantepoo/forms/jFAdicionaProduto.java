@@ -33,11 +33,10 @@ import restaurantepoo.logica.Produto;
 public class jFAdicionaProduto extends javax.swing.JFrame {
 
     /** Creates new form jFAdicionaProduto */
-    public  jFAdicionaProduto(jFMesas owner, Mesa m) throws SQLException {
+    public  jFAdicionaProduto(jFMesas owner, String numeroMesa) throws SQLException {
         initComponents();
-        m1 = m;
         son = owner;
-        numeroMesa.setText(String.valueOf(m1.getMesa()));
+        this.numeroMesa.setText(numeroMesa);
         populaTabela("");
     }
     DefaultTableModel tmProduto = new DefaultTableModel(
@@ -46,7 +45,7 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
     );
 
     private List<Produto> produtos;
-    Mesa m1;
+    //Mesa m1;
     jFMesas son;
     ListSelectionModel lsmProduto;
 
@@ -105,9 +104,7 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
 
     private void populaObjeto(Produto p1) {
         
-        p1.setProduto(Integer.parseInt(codigo.getText()));
-
-        try {
+       try {
             ProdutoDao dao = new ProdutoDao();
             dao.busca(p1);
         } catch (SQLException ex) {
@@ -115,11 +112,11 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         }
     }
 
-    public void atualizarFrameMesas(){
-        son.calculaValorTotal();
-        son.populaTabelaProdutos();
+    public void atualizarFrameMesas() throws SQLException{
+        //son.calculaValorTotal();
+        son.populaTabelaProdutosBanco();
 
-        System.out.println("Valor total recalculado: " + m1.getValorTotal());
+    //    System.out.println("Valor total recalculado: " + m1.getValorTotal());
         try {
             son.populaTabelaMesas("");
         } catch (SQLException ex) {
@@ -257,26 +254,33 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
             populaObjeto(p);
             MesaProdutoDao dao;
             
-            for (int i = 0; i < Integer.parseInt(quantidade.getText()); i++) {
-                m1.addProduto(p);
-            }
+//            for (int i = 0; i < Integer.parseInt(quantidade.getText()); i++) {
+//                m1.addProduto(p);
+//            }
 
             try {
                 dao = new MesaProdutoDao();
-     //           dao.inserirProduto(numeroMesa.getText(), Integer.parseInt(quantidade.getText()), p);
+                dao.inserirProduto(numeroMesa.getText(), quantidade.getText(), p);
             } catch (SQLException ex) {
                 Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            System.out.println(m1.toString());
-            atualizarFrameMesas();
+//            System.out.println(m1.toString());
+            try {
+                atualizarFrameMesas();
+            } catch (SQLException ex) {
+                Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
     }//GEN-LAST:event_inserirActionPerformed
 
     private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
-
-        atualizarFrameMesas();
+        try {
+            atualizarFrameMesas();
+        } catch (SQLException ex) {
+            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         dispose();
     }//GEN-LAST:event_voltarActionPerformed

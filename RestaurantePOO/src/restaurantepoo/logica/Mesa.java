@@ -26,9 +26,11 @@ public class Mesa {
     private double valorTotal;
     private boolean status;     // 1 = livre e 0 = ocupada
     public  ArrayList<Produto> produtos;
+    public ArrayList<String> quantidade;
 
     public Mesa() {
         produtos = new ArrayList<Produto>();
+        quantidade = new ArrayList<String>();
     }
 
     public Mesa(boolean status) {

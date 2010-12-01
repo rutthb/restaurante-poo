@@ -34,7 +34,7 @@ public class NotaFiscalItensDao {
         PreparedStatement stmt = conexao.prepareStatement(sql);
 
         // Seta os valores
-        stmt.setString(1, nf.getFunc().getNome());
+        stmt.setString(1, nf.getFunc());
         stmt.setString(2, String.valueOf(nf.getValorPago()));
         stmt.setString(3, nf.getCpfCliente());
         stmt.setString(4, nf.getTipoPagamento());

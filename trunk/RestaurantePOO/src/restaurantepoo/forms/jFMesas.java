@@ -25,8 +25,10 @@ import javax.swing.table.DefaultTableModel;
 import restaurantepoo.dao.ConfiguracaoDao;
 import restaurantepoo.dao.MesaDao;
 import restaurantepoo.dao.MesaProdutoDao;
+import restaurantepoo.dao.NotaFiscalItensDao;
 import restaurantepoo.logica.Configuracao;
 import restaurantepoo.logica.Mesa;
+import restaurantepoo.logica.NotaFiscalItens;
 import restaurantepoo.logica.Produto;
 
 /**
@@ -203,7 +205,29 @@ public class jFMesas extends javax.swing.JFrame {
         m1.setMesa(Integer.parseInt(numeroMesa.getText()));
         m1 = dao.getLista(String.valueOf(m1.getMesa())).get(0);
         m1.setHoraFechamento(data);
-        
+
+        // Gerar a nota fiscal, carregar alguns dados que compões a nota e salvá-la no banco.
+        NotaFiscalItensDao notaDao = new NotaFiscalItensDao();
+        int numeroNota;
+        NotaFiscalItens nota = new NotaFiscalItens();
+        nota.setCpfCliente("consumidor");
+        nota.setFunc("Jose");
+        nota.setTipoPagamento("debito");
+        nota.setValorPago(m1.getValorTotal());
+
+        numeroNota = notaDao.adiciona(nota);
+
+        /*Com a nota criada agora é possível inserir o numero da nota nos
+         *produtos que estavam associados apenas a mesa, liberando assim a mesa.
+         *
+         */
+        MesaProdutoDao mesaProdDao = new MesaProdutoDao();
+        mesaProdDao.gravaNumeroNotaMesa(numeroMesa.getText(), numeroNota);
+
+        /* faz uma cópia da mesa para gerar a nota fiscal, em seguida essa mesa
+        *é apagada e seus dados ficam armazenados no sistema com referencia
+        *apenas ao numero da nota fiscal
+        */
         m2 = m1;
         
        // m1.setHoraAbertura(m1.getHoraAbertura());
@@ -247,7 +271,7 @@ public class jFMesas extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("MESA:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
 
@@ -259,7 +283,7 @@ public class jFMesas extends javax.swing.JFrame {
         });
         jPanel1.add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 360, 80, 30));
 
-        cadProduto.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        cadProduto.setFont(new java.awt.Font("Tahoma", 0, 10));
         cadProduto.setText("Cadastrar Produto");
         cadProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -276,8 +300,13 @@ public class jFMesas extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 60, 460, 210));
 
-        cadFuncionario.setFont(new java.awt.Font("Tahoma", 0, 10));
+        cadFuncionario.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         cadFuncionario.setText("Cadastrar Funcionário");
+        cadFuncionario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadFuncionarioActionPerformed(evt);
+            }
+        });
         jPanel1.add(cadFuncionario, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 150, 30));
 
         jButton1.setText("Fechar Mesa");
@@ -408,6 +437,14 @@ public class jFMesas extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cadFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadFuncionarioActionPerformed
+        try {
+            new jFCadProduto().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cadFuncionarioActionPerformed
 
     /**
     * @param args the command line arguments

@@ -10,7 +10,12 @@ import java.sql.SQLException;
  *
  */
 public class CriaConexao {
-    //Registra o driver e estabelece uma conexão. Informa o erro em caso de exceção.
+    
+    /**
+     * Registra o driver e estabelece uma conexão. Informa o erro em caso de exceção.
+     * @return Estabelece conexão
+     * @throws SQLException
+     */
     public static Connection getConexao() throws SQLException {
         //Captura de exceções SQLException, uso obrigatório para JDBC
         try { 

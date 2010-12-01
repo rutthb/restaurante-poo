@@ -61,10 +61,7 @@
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="nummesas" min="-2" pref="51" max="-2" attributes="0"/>
-                                              <EmptySpace min="183" pref="183" max="183" attributes="0"/>
-                                          </Group>
+                                          <Component id="nummesas" alignment="0" min="-2" pref="51" max="-2" attributes="0"/>
                                           <Component id="descrefeicao" alignment="0" min="-2" pref="234" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>

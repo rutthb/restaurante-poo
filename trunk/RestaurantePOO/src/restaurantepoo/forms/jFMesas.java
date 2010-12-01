@@ -318,6 +318,7 @@ public class jFMesas extends javax.swing.JFrame {
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 320, 130, 30));
 
         jButton2.setText("Dividir Conta");
+        jButton2.setEnabled(false);
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, 130, 30));
 
         adicionaProduto.setText("Adicionar Produto");
@@ -420,14 +421,7 @@ public class jFMesas extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Mesa m1 = new Mesa();
-        try {
-            m1 = mudaStatusMesaParaLivre();
-        } catch (SQLException ex) {
-            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+
         try {
             new jFNotaProduto(numeroMesa.getText()).setVisible(true);
         } catch (SQLException ex) {
@@ -436,11 +430,21 @@ public class jFMesas extends javax.swing.JFrame {
             Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        try {
+            m1 = mudaStatusMesaParaLivre();
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cadFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadFuncionarioActionPerformed
         try {
-            new jFCadProduto().setVisible(true);
+            new jFCadFuncionario().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
         }

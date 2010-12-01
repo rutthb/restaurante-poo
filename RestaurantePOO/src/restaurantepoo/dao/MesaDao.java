@@ -40,7 +40,7 @@ public class MesaDao {
         stmt.setString(1, String.valueOf(m1.getHoraAbertura()));
         stmt.setString(2, String.valueOf(m1.getHoraFechamento()));
         stmt.setString(3, String.valueOf(m1.getValorTotal()));
-        stmt.setString(4, String.valueOf(m1.isStatus()));
+        stmt.setString(4, String.valueOf(m1.getStatus()));
 
 
         // Executa o código SQL
@@ -57,7 +57,7 @@ public class MesaDao {
 
         // Seta os valores
         stmt.setInt(1, m1.getMesa());
-        stmt.setBoolean(2, true);
+        stmt.setBoolean(2, true);   //true para mesas livres
         stmt.setDouble(3, 0.0);
 
         // Executa o código SQL
@@ -73,7 +73,7 @@ public class MesaDao {
 
     public  ArrayList<Mesa> getLista(String busca) throws SQLException, ParseException{
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
         String sql = "Select * from mesa where mesa like ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
@@ -88,10 +88,11 @@ public class MesaDao {
             Mesa m1 = new Mesa();
             m1.setMesa(rs.getInt("mesa"));
             m1.setHoraAbertura(sdf.parse(rs.getString("horaabertura")));
-//            m1.setHoraFechamento(sdf.parse(rs.getString("horafechamento")));
+            m1.setHoraFechamento(sdf.parse(rs.getString("horafechamento")));
             m1.setValorTotal(Double.parseDouble(rs.getString("valortotal")));
-            m1.setStatus(Boolean.parseBoolean("status"));
-
+            if(Integer.parseInt(rs.getString("status"))==1)
+                m1.setStatus(true);
+            else m1.setStatus(false);
 
             minhaLista.add(m1);
         }
@@ -105,14 +106,16 @@ public class MesaDao {
         String sql = "update mesa set horaabertura=?, horafechamento=?, valortotal=?, status=?" +
                         " where mesa=?";
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         PreparedStatement stmt = conexao.prepareStatement(sql);
 
         // Seta os valores
 
-        stmt.setString(1, String.valueOf(m1.getHoraAbertura()));
-        stmt.setString(2, String.valueOf(m1.getHoraFechamento()));
-        stmt.setString(3, String.valueOf(m1.getValorTotal()));
-        stmt.setString(4, String.valueOf(m1.isStatus()));
+        stmt.setString(1, String.valueOf(sdf.format(m1.getHoraAbertura())));
+        stmt.setString(2, String.valueOf(sdf.format(m1.getHoraFechamento())));
+        stmt.setDouble(3, m1.getValorTotal());
+        stmt.setBoolean(4, m1.getStatus());
+        stmt.setInt(5, m1.getMesa());
 
         // Executa o código SQL
         stmt.execute();

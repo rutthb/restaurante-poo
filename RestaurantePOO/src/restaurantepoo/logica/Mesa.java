@@ -45,7 +45,7 @@ public class Mesa {
         return produtos.get(i);
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 

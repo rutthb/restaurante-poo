@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Todos os métodos de envolvem banco de dados e Funcionário.
  */
 
 package restaurantepoo.dao;
@@ -15,22 +14,29 @@ import restaurantepoo.bancodados.CriaConexao;
 import restaurantepoo.logica.Funcionario;
 
 /**
- *
- * @author Antonio
+ * Classe que contém todas as manipulações de informações de funcionário no banco de dados.
+ * 
  */
 public class FuncionarioDao {
 
     private Connection conexao;
-
+    /**
+     * Cria conexão
+     * @throws SQLException
+     */
     public FuncionarioDao() throws SQLException{
         this.conexao = CriaConexao.getConexao();
     }
-
+    /**
+     * Método para inserções de registros na tabela funcionário
+     * @param objeto funcionário
+     * @throws SQLException
+     */
     public void adiciona(Funcionario f1) throws SQLException{
-
+        //Montagem da string sql que será rodada no banco de dados
         String  sql = "insert into funcionario (nome, cpf, endereco, telefone, funcao, salario) " +
                 "values (?,?,?,?,?,?)";
-
+        //Método preparedStatement de coneção para criar o PreparedStatement
         PreparedStatement stmt = conexao.prepareStatement(sql);
 
         // Seta os valores
@@ -42,21 +48,31 @@ public class FuncionarioDao {
         stmt.setString(6, String.valueOf(f1.getSalario()));
 
 
-        // Executa o código SQL
+        // Executa a string sql
         stmt.execute();
+        //Fecha conexão
         stmt.close();
     }
-
+    /**
+     * Lista de Funcionários cadastrados no sistema de acordo com algum critério de seleção.
+     * @param busca string de seleção para buscar um ou mais funcionários funcionário
+     * @return ArrayList de funcionários que se enquadraram na busca
+     * @throws SQLException
+     */
     public  List<Funcionario> getLista(String busca) throws SQLException{
         String sql = "Select * from funcionario where nome like ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
 
-        stmt.setString(1, busca);       // inserção do caracter de busca.
+        // inserção do caracter de busca.
+        stmt.setString(1, busca);       
 
+        //executa a query no banco de dados
         ResultSet rs = stmt.executeQuery();
 
+        //cria o arraylist de funcionários para armazenar todos os funcionários que retornaram da busca no banco
         List<Funcionario> minhaLista = new ArrayList<Funcionario>();
 
+        //funcionario por funcionário é adicionado no arraylist
         while(rs.next()){
             Funcionario p1 = new Funcionario();
             p1.setFuncionario(rs.getInt("funcionario"));
@@ -75,6 +91,11 @@ public class FuncionarioDao {
         return minhaLista;
     }
 
+    /**
+     * Método para atualização de dados de funcionário
+     * @param objeto funcionário que será atualizado
+     * @throws SQLException
+     */
     public void altera(Funcionario f1) throws SQLException{
         String sql = "update funcionario set nome=?, cpf=?, endereco=?, telefone=?, funcao=?" +
                         ", salario=? where funcionario=?";
@@ -94,7 +115,11 @@ public class FuncionarioDao {
         stmt.execute();
         stmt.close();
     }
-
+    /**
+     * Método para remoção do cadastro de funcionário
+     * @param objeto funcionário
+     * @throws SQLException
+     */
     public void remove(Funcionario f1) throws SQLException{
         String sql = "delete from funcionario where funcionario=?";
         PreparedStatement stmt = conexao.prepareStatement(sql);
@@ -109,7 +134,8 @@ public class FuncionarioDao {
         String sql = "Select * from funcionario where produto like ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
 
-        stmt.setString(1, String.valueOf(f1.getFuncionario()));       // inserção do caracter de busca.
+        // inserção do caracter de busca.
+        stmt.setString(1, String.valueOf(f1.getFuncionario()));
 
         ResultSet rs = stmt.executeQuery();
 

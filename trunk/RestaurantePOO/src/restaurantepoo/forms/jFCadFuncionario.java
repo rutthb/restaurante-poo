@@ -1,14 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * jFCadFuncionario.java
- *
- * Created on 15/11/2010, 20:55:26
- */
-
 package restaurantepoo.forms;
 
 import java.sql.SQLException;
@@ -21,15 +10,12 @@ import javax.swing.table.DefaultTableModel;
 import restaurantepoo.dao.FuncionarioDao;
 import restaurantepoo.logica.Funcionario;
 
-/**
- *
- * @author red
- */
 public class jFCadFuncionario extends javax.swing.JFrame {
 
     /** Creates new form jFCadFuncionario */
     public jFCadFuncionario() throws SQLException {
         initComponents();
+        this.setLocationRelativeTo(null);
         populaTabela("");
     }
 
@@ -107,7 +93,7 @@ public class jFCadFuncionario extends javax.swing.JFrame {
         cpf.setText("");
         endereco.setText("");
         telefone.setText("");
-        funcao.setSelectedItem("Caixa");
+        funcao.setSelectedItem(0);
         salario.setText("");
     }
 

@@ -37,6 +37,7 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
     /** Creates new form jFAdicionaProduto */
     public  jFAdicionaProduto(jFMesas owner, String numeroMesa) throws SQLException {
         initComponents();
+        this.setLocationRelativeTo(null);
         son = owner;
         this.numeroMesa.setText(numeroMesa);
         populaTabela("");

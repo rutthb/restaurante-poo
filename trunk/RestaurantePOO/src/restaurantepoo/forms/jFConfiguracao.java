@@ -12,11 +12,15 @@
 package restaurantepoo.forms;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import restaurantepoo.dao.ConfiguracaoDao;
 import restaurantepoo.logica.Configuracao;
+import restaurantepoo.dao.MesaDao;
+import restaurantepoo.logica.Mesa;
 
 /**
  *
@@ -28,6 +32,22 @@ public class jFConfiguracao extends javax.swing.JFrame {
     public jFConfiguracao() throws SQLException {
         initComponents();
         populaForm();
+    }
+
+    public void criarMesas(int numeroMesas) throws SQLException{
+        MesaDao daoMesa = new MesaDao();
+        Mesa m1 = new Mesa();
+        Date data = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        m1.setHoraAbertura(data);
+        daoMesa.apagaMesas();
+
+        for (int i=1; i<=numeroMesas;i++){
+            m1.setMesa(i);
+            daoMesa.criaMesa(m1);
+        }
+
     }
 
     /** This method is called from within the constructor to
@@ -59,46 +79,47 @@ public class jFConfiguracao extends javax.swing.JFrame {
         inscestadual = new javax.swing.JTextField();
         nome = new javax.swing.JTextField();
         telefone = new javax.swing.JTextField();
-        nummesas = new javax.swing.JTextField();
+        numMesas = new javax.swing.JTextField();
         descrefeicao = new javax.swing.JTextField();
         cancelar = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        criarMesas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Configuração");
         setName(""); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("Configurações do Restaurante");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText("Altere os campos que desejar e depois clique no botão Atualizar. ");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText("CNPJ:");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel4.setText("Razão Social:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setText("Número mesas:");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel6.setText("Inscrição Estadual:");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel8.setText("Nome:");
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel9.setText("Endereço:");
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel10.setText("Telefone:");
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel11.setText("Configurações da Nota Fiscal");
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel12.setText("Descrição para Refeição*:");
 
         jLabel13.setText("*Aparecerá essa descrição quando o tipo da nota fiscal for Refeição.");
@@ -122,6 +143,13 @@ public class jFConfiguracao extends javax.swing.JFrame {
         });
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Config32.png"))); // NOI18N
+
+        criarMesas.setText("Criar Mesa");
+        criarMesas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                criarMesasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,8 +188,9 @@ public class jFConfiguracao extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(nummesas, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(183, 183, 183))
+                                                .addComponent(numMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(44, 44, 44)
+                                                .addComponent(criarMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addComponent(descrefeicao, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(83, 83, 83)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -221,7 +250,9 @@ public class jFConfiguracao extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel5)
-                            .addComponent(nummesas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(numMesas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(criarMesas)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel12)
@@ -257,6 +288,14 @@ public class jFConfiguracao extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_atualizarActionPerformed
 
+    private void criarMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarMesasActionPerformed
+        try {
+            criarMesas(Integer.parseInt(numMesas.getText()));
+        } catch (SQLException ex) {
+            Logger.getLogger(jFConfiguracao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_criarMesasActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -289,7 +328,7 @@ public class jFConfiguracao extends javax.swing.JFrame {
         nome.setText(c1.getNome());
         endereco.setText(c1.getEndereco());
         telefone.setText(c1.getTelefone());
-        nummesas.setText(String.valueOf(c1.getNumeroMesas()));
+        numMesas.setText(String.valueOf(c1.getNumeroMesas()));
         descrefeicao.setText(c1.getDescricaoRefeicao());
     }
 
@@ -302,7 +341,7 @@ public class jFConfiguracao extends javax.swing.JFrame {
             c1.setNome(nome.getText());
             c1.setEndereco(endereco.getText());
             c1.setTelefone(telefone.getText());
-            c1.setNumeroMesas(Integer.parseInt(nummesas.getText()));
+            c1.setNumeroMesas(Integer.parseInt(numMesas.getText()));
             c1.setDescricaoRefeicao(descrefeicao.getText());
             return true;
         }
@@ -311,7 +350,7 @@ public class jFConfiguracao extends javax.swing.JFrame {
 
     private boolean verificaStrings(){
 
-        if (!cnpj.getText().equals("") && !razaosocial.getText().equals("") && !inscestadual.getText().equals("") && !nome.getText().equals("") && !endereco.getText().equals("") && !telefone.getText().equals("") && !nummesas.getText().equals("") && !descrefeicao.getText().equals("")) {
+        if (!cnpj.getText().equals("") && !razaosocial.getText().equals("") && !inscestadual.getText().equals("") && !nome.getText().equals("") && !endereco.getText().equals("") && !telefone.getText().equals("") && !numMesas.getText().equals("") && !descrefeicao.getText().equals("")) {
             return true;
         } else {
             JOptionPane.showMessageDialog(null, "Nenhum campo pode ser deixado em branco!");
@@ -322,7 +361,7 @@ public class jFConfiguracao extends javax.swing.JFrame {
     private boolean verificaInt(){
         int temp;
         try{
-            temp = Integer.parseInt(nummesas.getText());
+            temp = Integer.parseInt(numMesas.getText());
             return true;
         }
         catch(Exception e){
@@ -337,6 +376,7 @@ public class jFConfiguracao extends javax.swing.JFrame {
     private javax.swing.JButton atualizar;
     private javax.swing.JButton cancelar;
     private javax.swing.JTextField cnpj;
+    private javax.swing.JButton criarMesas;
     private javax.swing.JTextField descrefeicao;
     private javax.swing.JTextArea endereco;
     private javax.swing.JTextField inscestadual;
@@ -355,7 +395,7 @@ public class jFConfiguracao extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nome;
-    private javax.swing.JTextField nummesas;
+    private javax.swing.JTextField numMesas;
     private javax.swing.JTextField razaosocial;
     private javax.swing.JTextField telefone;
     // End of variables declaration//GEN-END:variables

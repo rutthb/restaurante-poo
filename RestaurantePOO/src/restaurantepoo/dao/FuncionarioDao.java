@@ -131,7 +131,7 @@ public class FuncionarioDao {
     }
 
     public void busca(Funcionario f1) throws SQLException{
-        String sql = "Select * from funcionario where produto like ?";
+        String sql = "Select * from funcionario where funcionario = ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
 
         // inserção do caracter de busca.
@@ -141,6 +141,11 @@ public class FuncionarioDao {
 
         while(rs.next()){
             f1.setNome(rs.getString("nome"));
+            f1.setCpf(rs.getString("cpf"));
+            f1.setEndereco(rs.getString("endereco"));
+            f1.setTelefone(rs.getString("telefone"));
+            f1.setFuncao(rs.getString("funcao"));
+            f1.setSalario(rs.getDouble("salario"));
         }
 
         rs.close();

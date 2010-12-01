@@ -13,7 +13,9 @@ package restaurantepoo.forms;
 import java.security.acl.Owner;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -125,6 +127,33 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
             Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public Boolean verificaStatusMesa() throws SQLException, ParseException{
+        MesaDao dao = new MesaDao();
+        Mesa m1 = new Mesa();
+        m1 = dao.getLista(numeroMesa.getText()).get(0);
+
+        if(m1.getStatus())      //true é mesa liver
+            return true;
+        else    return false;
+    }
+
+    public void mudaStatusMesaParaOcupada() throws SQLException, ParseException{
+        MesaDao dao = new MesaDao();
+        Mesa m1 = new Mesa();
+        Date data = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        m1.setHoraAbertura(data);
+        m1.setHoraFechamento(sdf.parse("2010-00-00 00:00:00"));
+        m1.setMesa(Integer.parseInt(numeroMesa.getText()));
+        m1.setStatus(false);
+
+
+        dao.altera(m1);
+    }
+
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -252,6 +281,7 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
             p.setProduto(Integer.parseInt(codigo.getText()));
 
             populaObjeto(p);
+
             MesaProdutoDao dao;
             
 //            for (int i = 0; i < Integer.parseInt(quantidade.getText()); i++) {
@@ -264,8 +294,17 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
             }
+            try {
+                if (verificaStatusMesa()) {     // true é mesa livre
+                   mudaStatusMesaParaOcupada();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-//            System.out.println(m1.toString());
+
             try {
                 atualizarFrameMesas();
             } catch (SQLException ex) {

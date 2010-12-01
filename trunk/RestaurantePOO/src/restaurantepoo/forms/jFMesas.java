@@ -14,14 +14,18 @@ package restaurantepoo.forms;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import restaurantepoo.dao.ConfiguracaoDao;
 import restaurantepoo.dao.MesaDao;
 import restaurantepoo.dao.MesaProdutoDao;
+import restaurantepoo.logica.Configuracao;
 import restaurantepoo.logica.Mesa;
 import restaurantepoo.logica.Produto;
 
@@ -34,8 +38,9 @@ public class jFMesas extends javax.swing.JFrame {
     /** Creates new form jFMesas */
     public jFMesas() throws SQLException, ParseException {
         initComponents();
-        populaTabelaMesas("");
         criaMesas(10);
+        populaTabelaMesas("");
+        
     }
     
      DefaultTableModel tmMesa = new DefaultTableModel(
@@ -103,10 +108,12 @@ public class jFMesas extends javax.swing.JFrame {
     }
 
     private void insereTabelaMesas(Mesa m1){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        System.out.println(String.valueOf(m1.getStatus()));
 
         tmMesa.addRow(new String[]{
             String.valueOf(m1.getMesa()),
-            !m1.isStatus()?"Livre":String.valueOf(m1.getHoraAbertura()),
+            m1.getStatus()?"Livre":String.valueOf(sdf.format(m1.getHoraAbertura()).toString()),
             String.valueOf(m1.getValorTotal())
         });
     }
@@ -121,17 +128,23 @@ public class jFMesas extends javax.swing.JFrame {
     }
 
     private void criaMesas(int n) throws SQLException{
-        for (int i=0; i<=n; i++){
+        Configuracao con = new Configuracao();
+
+        ConfiguracaoDao daoConf = new ConfiguracaoDao();
+        daoConf.busca(con);
+
+        for (int i=1; i<=con.getNumeroMesas(); i++){
             Mesa m = new Mesa();
             m.setMesa(i);
             mesas.add(m);
-            //criaMesasBanco(m);    Linha só é utilizada para criar as mesas no banco de dados.
+            //criaMesasBanco(m);    //Linha só é utilizada para criar as mesas no banco de dados.
         }
     }
 
     private void criaMesasBanco(Mesa m1) throws SQLException{
-        MesaDao dao = new MesaDao();
-        dao.criaMesa(m1);
+        
+        MesaDao daoMesa = new MesaDao();
+        daoMesa.criaMesa(m1);
     }
 
     public void salvaValorTotal(Double total){
@@ -181,6 +194,25 @@ public class jFMesas extends javax.swing.JFrame {
         return linha;
     }
 
+    public Mesa mudaStatusMesaParaLivre() throws SQLException, ParseException{
+        MesaDao dao = new MesaDao();
+        Mesa m1 = new Mesa();
+        Date data = new Date();
+
+        m1.setMesa(Integer.parseInt(numeroMesa.getText()));
+
+        m1 = dao.getLista(String.valueOf(m1.getMesa())).get(0);
+        m1.setHoraAbertura(m1.getHoraAbertura()); 
+        m1.setHoraFechamento(data);
+        m1.setStatus(true);
+        m1.setValorTotal(0);
+
+        dao.altera(m1);
+        m1 = dao.getLista(String.valueOf(m1.getMesa())).get(0);
+
+        return m1;
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -201,6 +233,7 @@ public class jFMesas extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         adicionaProduto = new javax.swing.JButton();
+        configuracao = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaMesas = new javax.swing.JTable();
@@ -240,11 +273,16 @@ public class jFMesas extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 60, 460, 210));
 
-        cadFuncionario.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        cadFuncionario.setFont(new java.awt.Font("Tahoma", 0, 10));
         cadFuncionario.setText("Cadastrar Funcionário");
         jPanel1.add(cadFuncionario, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 150, 30));
 
         jButton1.setText("Fechar Mesa");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 320, 130, 30));
 
         jButton2.setText("Dividir Conta");
@@ -258,7 +296,15 @@ public class jFMesas extends javax.swing.JFrame {
         });
         jPanel1.add(adicionaProduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 150, 30));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 370));
+        configuracao.setText("Configuração");
+        configuracao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configuracaoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(configuracao, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 150, 30));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 410));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -332,6 +378,25 @@ public class jFMesas extends javax.swing.JFrame {
         System.out.println("Voltando do Forme de adicionar Produtos...");
     }//GEN-LAST:event_adicionaProdutoActionPerformed
 
+    private void configuracaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configuracaoActionPerformed
+        try {
+            new jFConfiguracao().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_configuracaoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Mesa m1 = new Mesa();
+        try {
+            m1 = mudaStatusMesaParaLivre();
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -346,6 +411,7 @@ public class jFMesas extends javax.swing.JFrame {
     private javax.swing.JButton adicionaProduto;
     private javax.swing.JButton cadFuncionario;
     private javax.swing.JButton cadProduto;
+    private javax.swing.JButton configuracao;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

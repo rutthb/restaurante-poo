@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Todos os métodos de envolvem banco de dados e Produto.
  */
 
 package restaurantepoo.dao;
@@ -15,17 +14,23 @@ import restaurantepoo.bancodados.CriaConexao;
 import restaurantepoo.logica.Produto;
 
 /**
- *
- * @author Antonio
+ *Classe que contém todas as manipulações de informações de Produto no banco de dados.
  */
 public class ProdutoDao {
 
     private Connection conexao;
-
+    /**
+     * Cria conexão
+     * @throws SQLException
+     */
     public ProdutoDao() throws SQLException{
         this.conexao = CriaConexao.getConexao();
     }
-
+    /**
+     * Método para inserções de registros na tabela Produto
+     * @param objeto produto
+     * @throws SQLException
+     */
     public void adiciona(Produto p) throws SQLException{
         
         String  sql = "insert into produto (nome, descricao, preco) " +
@@ -40,15 +45,21 @@ public class ProdutoDao {
 
         // Executa o código SQL
         stmt.execute();
+        //Fecha conexão
         stmt.close();
     }
 
-
+    /**
+     * Método para busca produto no banco segundo o critério de id.
+     * @param objeto produto
+     * @throws SQLException
+     */
     public void busca(Produto p1) throws SQLException{
         String sql = "Select * from produto where produto like ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
 
-        stmt.setString(1, String.valueOf(p1.getProduto()));       // inserção do caracter de busca.
+        // inserção do caracter de busca.
+        stmt.setString(1, String.valueOf(p1.getProduto()));       
 
         ResultSet rs = stmt.executeQuery();
 
@@ -61,6 +72,12 @@ public class ProdutoDao {
         rs.close();
         stmt.close();
     }
+    /**
+     * Método para busca produto no banco segundo o critério nome.
+     * @param string busca
+     * @return ArrayList de produtos que atenderam ao critério de busca
+     * @throws SQLException
+     */
 
     public  List<Produto> getLista(String busca) throws SQLException{
         String sql = "Select * from produto where nome like ?";
@@ -86,6 +103,11 @@ public class ProdutoDao {
         stmt.close();
         return minhaLista;
     }
+    /**
+     * Método para atualização de dados de produto
+     * @param objeto produto
+     * @throws SQLException
+     */
 
     public void altera(Produto p1) throws SQLException{
         String sql = "update produto set nome=?, preco=?" +
@@ -93,7 +115,6 @@ public class ProdutoDao {
         PreparedStatement stmt = conexao.prepareStatement(sql);
 
         // Seta os valores
-
         stmt.setString(1, p1.getNome());
         stmt.setString(2, String.valueOf(p1.getPreco()));
         stmt.setString(3, p1.getDescricao());
@@ -104,6 +125,11 @@ public class ProdutoDao {
         stmt.close();
     }
 
+    /**
+     * Método para remoção do cadastro de produto
+     * @param objeto produto
+     * @throws SQLException
+     */
     public void remove(Produto p1) throws SQLException{
         String sql = "delete from produto where produto=?";
         PreparedStatement stmt = conexao.prepareStatement(sql);

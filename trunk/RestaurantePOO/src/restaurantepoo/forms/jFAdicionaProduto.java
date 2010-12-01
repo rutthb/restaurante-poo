@@ -180,18 +180,19 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         numeroMesa = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Busca por Produtos");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        buscar.setFont(new java.awt.Font("Tahoma", 0, 14));
+        buscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         buscar.setText("Buscar");
         buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buscarActionPerformed(evt);
             }
         });
-        jPanel1.add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 40, 90, 30));
+        jPanel1.add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 45, 90, -1));
 
         tabelaProdutos.setModel(tmProduto);
         tabelaProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -206,14 +207,14 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         campoBusca.setFont(new java.awt.Font("Tahoma", 0, 14));
         jPanel1.add(campoBusca, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 240, 20));
 
-        inserir.setFont(new java.awt.Font("Tahoma", 0, 14));
+        inserir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         inserir.setText("Inserir");
         inserir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inserirActionPerformed(evt);
             }
         });
-        jPanel1.add(inserir, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 340, 90, 30));
+        jPanel1.add(inserir, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 340, 90, 30));
 
         voltar.setFont(new java.awt.Font("Tahoma", 0, 14));
         voltar.setText("Voltar");
@@ -231,9 +232,9 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         jLabel1.setText("Quantidade:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 90, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Busca por Produtos");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel3.setText("Nome:");
@@ -246,12 +247,12 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         codigo.setFont(new java.awt.Font("Tahoma", 0, 14));
         jPanel1.add(codigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, 60, -1));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel5.setText("MESA:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         numeroMesa.setEditable(false);
-        numeroMesa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        numeroMesa.setFont(new java.awt.Font("Tahoma", 0, 14));
         numeroMesa.setBorder(null);
         jPanel1.add(numeroMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 40, -1));
 

@@ -245,7 +245,7 @@ public class jFConfiguracao extends javax.swing.JFrame {
 
     private void atualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarActionPerformed
         Configuracao c1 = new Configuracao();
-        preencherObjeto(c1);
+         if (preencherObjeto(c1)){
         try{
             ConfiguracaoDao dao = new ConfiguracaoDao();
             dao.altera(c1);
@@ -254,7 +254,7 @@ public class jFConfiguracao extends javax.swing.JFrame {
         catch (SQLException ex){
             Logger.getLogger(jFConfiguracao.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        }
     }//GEN-LAST:event_atualizarActionPerformed
 
     /**
@@ -293,18 +293,43 @@ public class jFConfiguracao extends javax.swing.JFrame {
         descrefeicao.setText(c1.getDescricaoRefeicao());
     }
 
-    private void preencherObjeto(Configuracao c1){
+    private boolean preencherObjeto(Configuracao c1){
+        if (verificaStrings() && verificaInt()){
 
-        c1.setCnpj(cnpj.getText());
-        c1.setRazaoSocial(razaosocial.getText());
-        c1.setInscEstadual(inscestadual.getText());
-        c1.setNome(nome.getText());
-        c1.setEndereco(endereco.getText());
-        c1.setTelefone(telefone.getText());
-        c1.setNumeroMesas(Integer.parseInt(nummesas.getText()));
-        c1.setDescricaoRefeicao(descrefeicao.getText());
-
+            c1.setCnpj(cnpj.getText());
+            c1.setRazaoSocial(razaosocial.getText());
+            c1.setInscEstadual(inscestadual.getText());
+            c1.setNome(nome.getText());
+            c1.setEndereco(endereco.getText());
+            c1.setTelefone(telefone.getText());
+            c1.setNumeroMesas(Integer.parseInt(nummesas.getText()));
+            c1.setDescricaoRefeicao(descrefeicao.getText());
+            return true;
+        }
+        else return false;
      }
+
+    private boolean verificaStrings(){
+
+        if (!cnpj.getText().equals("") && !razaosocial.getText().equals("") && !inscestadual.getText().equals("") && !nome.getText().equals("") && !endereco.getText().equals("") && !telefone.getText().equals("") && !nummesas.getText().equals("") && !descrefeicao.getText().equals("")) {
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Nenhum campo pode ser deixado em branco!");
+            return false;
+        }
+    }
+
+    private boolean verificaInt(){
+        int temp;
+        try{
+            temp = Integer.parseInt(nummesas.getText());
+            return true;
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, "O número de mesas deve ser inteiro. Não use ponto ou vírgula.");
+            return false;
+        }
+    }
 
 
 

@@ -1,14 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package restaurantepoo.logica;
 
-/**
- *
- * @author Antonio
- */
 public class Configuracao {
     private String nome;
     private String telefone;
@@ -102,5 +93,9 @@ public class Configuracao {
         return "Configuracao{" + "nome=" + nome + "telefone=" + telefone + "endereco=" + endereco + "cnpj=" + cnpj + "razaoSocial=" + razaoSocial + "inscEstadual=" + inscEstadual + "numeroMesas=" + numeroMesas + "descricaoRefeicao=" + descricaoRefeicao + '}';
     }
 
+
+    public String cabecalhoNota() {
+        return "\n" + nome + "\n" + endereco + "\n" + "Fone:" + telefone + "\n" + "\n" + "CNPJ: " + cnpj + "\n" + "IE: " + cnpj + "------------------------------------------------";
+    }
 
 }

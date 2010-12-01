@@ -50,8 +50,10 @@ public class MesaDao {
 
     public void criaMesa(Mesa m1) throws SQLException{
 
-        String  sql = "insert into mesa (mesa,status,valortotal) " +
-                "values (?,?,?)";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        String  sql = "insert into mesa (mesa,status,valortotal,horaabertura) " +
+                "values (?,?,?,?)";
 
         PreparedStatement stmt = conexao.prepareStatement(sql);
 
@@ -59,6 +61,18 @@ public class MesaDao {
         stmt.setInt(1, m1.getMesa());
         stmt.setBoolean(2, true);   //true para mesas livres
         stmt.setDouble(3, 0.0);
+        stmt.setString(4, String.valueOf(sdf.format(m1.getHoraAbertura())));
+
+        // Executa o código SQL
+        stmt.execute();
+        stmt.close();
+    }
+
+        public void apagaMesas() throws SQLException{
+
+        String  sql = "delete from mesa";
+
+        PreparedStatement stmt = conexao.prepareStatement(sql);
 
         // Executa o código SQL
         stmt.execute();

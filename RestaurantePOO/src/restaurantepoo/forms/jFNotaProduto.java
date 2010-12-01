@@ -12,8 +12,15 @@
 package restaurantepoo.forms;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import restaurantepoo.dao.ConfiguracaoDao;
+import restaurantepoo.dao.MesaDao;
 import restaurantepoo.dao.MesaProdutoDao;
+import restaurantepoo.logica.Configuracao;
 import restaurantepoo.logica.Mesa;
+import restaurantepoo.logica.Produto;
 
 /**
  *
@@ -22,19 +29,37 @@ import restaurantepoo.logica.Mesa;
 public class jFNotaProduto extends javax.swing.JFrame {
 
     /** Creates new form jFNotaProduto */
-    public jFNotaProduto(String numMesa) throws SQLException {
+    public jFNotaProduto(String numMesa) throws SQLException, ParseException {
         initComponents();
-        montaNota(numMesa);
+        this.numMesa = numMesa;
+        populaTabelaProdutosBanco();
+        imprimiCabecalho();
+        //montaNota(numMesa);
     }
 
-    public void populaTabelaProdutosBanco() throws SQLException {
+      DefaultTableModel tmProduto = new DefaultTableModel(
+            new Object [][]{
+            },
+            new String[]{"Quantidade", "Código", "Nome", "Preço", "Sub-total"}
+     );
+
+    ListSelectionModel lsmProdutos;
+    String numMesa;
+    Double somaTotal = 0.0;
+
+    private void populaTabelaProdutosBanco() throws SQLException, ParseException {
         tmProduto.setRowCount(0);
 
-        MesaProdutoDao dao = new MesaProdutoDao();
         Mesa m1 = new Mesa();
-        Double somaTotal = 0.0;
 
-        dao.getListaProdutosMesa(numeroMesa.getText(), m1);
+        MesaDao daoMesa = new MesaDao();
+        m1 = daoMesa.getLista(numMesa).get(0);
+
+        MesaProdutoDao dao = new MesaProdutoDao();
+        
+        dao.getListaProdutosMesa(numMesa, m1);
+
+        
 
         for (int i = 0; i < m1.produtos.size(); i++) {
 
@@ -44,14 +69,33 @@ public class jFNotaProduto extends javax.swing.JFrame {
             somaTotal += soma;
 
             tmProduto.addRow(new String[]{
+                        String.valueOf(qtd),
                         String.valueOf(m1.produtos.get(i).getProduto()),
                         m1.produtos.get(i).getNome(),
                         String.valueOf(preco),
-                        String.valueOf(qtd),
                         String.valueOf(soma)
                     });
         }
-        salvaValorTotal(somaTotal);
+        total.setText(String.valueOf(somaTotal));
+    }
+
+    private void insereTabelaProdutos(Produto p1){
+
+        tmProduto.addRow(new String[]{
+            String.valueOf(p1.getProduto()),
+            p1.getNome(),
+            String.valueOf(p1.getPreco())
+        });
+    }
+
+    private void imprimiCabecalho() throws SQLException{
+        Configuracao config = new Configuracao();
+        ConfiguracaoDao dao = new ConfiguracaoDao();
+
+        dao.busca(config);
+
+        cabecalho.setText(config.cabecalhoNota());
+        cabecalho.setEditable(false);
     }
 
     /** This method is called from within the constructor to
@@ -63,18 +107,55 @@ public class jFNotaProduto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        total = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        cabecalho = new javax.swing.JTextArea();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Nota Fiscal Produtos");
+
+        jTable1.setModel(tmProduto);
+        jTable1.setRowSelectionAllowed(false);
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabel1.setText("TOTAL: ");
+
+        total.setText("jLabel2");
+
+        cabecalho.setColumns(20);
+        cabecalho.setRows(5);
+        jScrollPane2.setViewportView(cabecalho);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 426, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 523, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(total))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -86,12 +167,17 @@ public class jFNotaProduto extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jFNotaProduto().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea cabecalho;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel total;
     // End of variables declaration//GEN-END:variables
 
 }

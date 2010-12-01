@@ -48,6 +48,20 @@ public class MesaProdutoDao {
         stmt.close();
     }
 
+        public void gravaNumeroNotaMesa(String numeroMesa, int numeroNota) throws SQLException{
+
+        String sql = "update mesa_produto SET notafiscalitens=? where mesa = ? and notafiscalitens = 0";
+
+        PreparedStatement stmt = this.conexao.prepareStatement(sql);
+
+        stmt.setInt(1, numeroNota);       // inserção do caracter de busca.
+        stmt.setString(1, numeroMesa);       // inserção do caracter de busca.
+
+
+        stmt.execute();
+        stmt.close();
+    }
+
     public void inserirProduto(String numeroMesa, String quantidade, Produto p) throws SQLException {
         int contagem = 0;
 

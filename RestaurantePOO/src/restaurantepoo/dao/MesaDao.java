@@ -75,7 +75,7 @@ public class MesaDao {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-        String sql = "Select * from mesa where mesa like ?";
+        String sql = "Select * from mesa where mesa like ? ORDER BY mesa ASC";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
 
         stmt.setString(1, busca);       // inserção do caracter de busca.

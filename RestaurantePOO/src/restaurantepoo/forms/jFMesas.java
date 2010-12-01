@@ -197,20 +197,23 @@ public class jFMesas extends javax.swing.JFrame {
     public Mesa mudaStatusMesaParaLivre() throws SQLException, ParseException{
         MesaDao dao = new MesaDao();
         Mesa m1 = new Mesa();
+        Mesa m2 = new Mesa();
         Date data = new Date();
 
         m1.setMesa(Integer.parseInt(numeroMesa.getText()));
-
         m1 = dao.getLista(String.valueOf(m1.getMesa())).get(0);
-        m1.setHoraAbertura(m1.getHoraAbertura()); 
         m1.setHoraFechamento(data);
+        
+        m2 = m1;
+        
+       // m1.setHoraAbertura(m1.getHoraAbertura());
         m1.setStatus(true);
         m1.setValorTotal(0);
 
         dao.altera(m1);
         m1 = dao.getLista(String.valueOf(m1.getMesa())).get(0);
 
-        return m1;
+        return m2;
     }
 
     /** This method is called from within the constructor to
@@ -244,9 +247,9 @@ public class jFMesas extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("MESA:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
 
         sair.setText("Sair");
         sair.addActionListener(new java.awt.event.ActionListener() {
@@ -254,7 +257,7 @@ public class jFMesas extends javax.swing.JFrame {
                 sairActionPerformed(evt);
             }
         });
-        jPanel1.add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 320, 80, 30));
+        jPanel1.add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 360, 80, 30));
 
         cadProduto.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         cadProduto.setText("Cadastrar Produto");
@@ -266,7 +269,7 @@ public class jFMesas extends javax.swing.JFrame {
         jPanel1.add(cadProduto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 150, 30));
 
         numeroMesa.setEditable(false);
-        jPanel1.add(numeroMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 60, -1));
+        jPanel1.add(numeroMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 60, -1));
 
         produtos.setModel(tmProduto);
         jScrollPane2.setViewportView(produtos);
@@ -283,10 +286,10 @@ public class jFMesas extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 320, 130, 30));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 320, 130, 30));
 
         jButton2.setText("Dividir Conta");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 280, 130, 30));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, 130, 30));
 
         adicionaProduto.setText("Adicionar Produto");
         adicionaProduto.addActionListener(new java.awt.event.ActionListener() {
@@ -329,11 +332,11 @@ public class jFMesas extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 340, 300));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 340, 410));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -395,6 +398,15 @@ public class jFMesas extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        try {
+            new jFNotaProduto(numeroMesa.getText()).setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -10,9 +10,10 @@ import java.sql.SQLException;
  *
  */
 public class CriaConexao {
-    //Registra o driver e estabelece uma conexão. Informa o erro em caso de exceção./
+    //Registra o driver e estabelece uma conexão. Informa o erro em caso de exceção.
     public static Connection getConexao() throws SQLException {
-        try { //Captura de exceções SQLException, uso obrigatório para JDBC
+        //Captura de exceções SQLException, uso obrigatório para JDBC
+        try { 
             //Registra um driver
             Class.forName("com.mysql.jdbc.Driver");
             System.out.println("Conectando ao Banco");

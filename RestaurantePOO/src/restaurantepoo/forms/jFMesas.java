@@ -40,7 +40,7 @@ public class jFMesas extends javax.swing.JFrame {
     /** Creates new form jFMesas */
     public jFMesas() throws SQLException, ParseException {
         initComponents();
-        criaMesas(10);
+        criaMesas();
         populaTabelaMesas("");
         
     }
@@ -129,7 +129,7 @@ public class jFMesas extends javax.swing.JFrame {
         });
     }
 
-    private void criaMesas(int n) throws SQLException{
+    private void criaMesas() throws SQLException{
         Configuracao con = new Configuracao();
 
         ConfiguracaoDao daoConf = new ConfiguracaoDao();

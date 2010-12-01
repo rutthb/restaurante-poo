@@ -15,17 +15,17 @@ public class CupomFiscal {
     private String tipoPagamento;
     private double valorPago;
     private String cpfCliente;
-    private Funcionario func;
+    private String func;
     private Configuracao conf;
 
     public CupomFiscal() {
     }
 
-    public Funcionario getFunc() {
+    public String getFunc() {
         return func;
     }
 
-    public void setFunc(Funcionario func) {
+    public void setFunc(String func) {
         this.func = func;
     }
 

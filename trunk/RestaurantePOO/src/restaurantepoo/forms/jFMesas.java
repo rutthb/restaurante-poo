@@ -40,12 +40,13 @@ public class jFMesas extends javax.swing.JFrame {
     /** Creates new form jFMesas */
     public jFMesas() throws SQLException, ParseException {
         initComponents();
-        criaMesas();
-        populaTabelaMesas("");
+        criaMesas();        // Cria array de Mesas na memória a partir dos dados do Banco
+        populaTabelaMesas("");      //Carrega a tabela de mesas
         
     }
-    
-     DefaultTableModel tmMesa = new DefaultTableModel(
+
+    //Criação do modelo que será utilizado na montagem da tabeba de mesas
+    DefaultTableModel tmMesa = new DefaultTableModel(
             new Object [][]{
             },
             new String[]{"mesa", "horaabertura", "valortotal"}
@@ -57,8 +58,9 @@ public class jFMesas extends javax.swing.JFrame {
             new String[]{"produto", "nome", "preco", "quantidade", "total item"}
      );
 
-    public ArrayList<Mesa> mesas = new ArrayList<Mesa>();
-    Mesa mesa;
+
+    public ArrayList<Mesa> mesas = new ArrayList<Mesa>(); // criação do array de mesas
+    Mesa mesa;                                            // cria uma referência do tipo Mesa
     ListSelectionModel lsmMesa;
     ListSelectionModel lsmProdutos;
 

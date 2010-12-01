@@ -13,6 +13,8 @@ package restaurantepoo.forms;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import restaurantepoo.dao.ConfiguracaoDao;
@@ -29,15 +31,18 @@ import restaurantepoo.logica.Produto;
 public class jFNotaProduto extends javax.swing.JFrame {
 
     /** Creates new form jFNotaProduto */
-    public jFNotaProduto(String numMesa) throws SQLException, ParseException {
+    public jFNotaProduto(jFMesas owner, String numMesa) throws SQLException, ParseException {
         initComponents();
         this.numMesa = numMesa;
+        son = owner;
         populaTabelaProdutosBanco();
         imprimiCabecalho();
         //montaNota(numMesa);
     }
 
-      DefaultTableModel tmProduto = new DefaultTableModel(
+    jFMesas son;
+
+    DefaultTableModel tmProduto = new DefaultTableModel(
             new Object [][]{
             },
             new String[]{"Quantidade", "Código", "Nome", "Preço", "Sub-total"}
@@ -96,6 +101,20 @@ public class jFNotaProduto extends javax.swing.JFrame {
 
         cabecalho.setText(config.cabecalhoNota());
         cabecalho.setEditable(false);
+    }
+
+    public void atualizarFrameMesas() throws SQLException{
+        //son.calculaValorTotal();
+        son.populaTabelaProdutosBanco();
+
+    //    System.out.println("Valor total recalculado: " + m1.getValorTotal());
+        try {
+            son.populaTabelaMesas("");
+        } catch (SQLException ex) {
+            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(jFAdicionaProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -173,6 +192,11 @@ public class jFNotaProduto extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
+        try {
+            atualizarFrameMesas();
+        } catch (SQLException ex) {
+            Logger.getLogger(jFNotaProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
         dispose();
     }//GEN-LAST:event_sairActionPerformed
 

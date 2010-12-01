@@ -423,7 +423,7 @@ public class jFMesas extends javax.swing.JFrame {
         Mesa m1 = new Mesa();
 
         try {
-            new jFNotaProduto(numeroMesa.getText()).setVisible(true);
+            new jFNotaProduto(this,numeroMesa.getText()).setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(jFMesas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {

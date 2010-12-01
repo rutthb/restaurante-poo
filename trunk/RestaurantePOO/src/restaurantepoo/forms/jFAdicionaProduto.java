@@ -149,7 +149,6 @@ public class jFAdicionaProduto extends javax.swing.JFrame {
         m1.setMesa(Integer.parseInt(numeroMesa.getText()));
         m1.setStatus(false);
 
-
         dao.altera(m1);
     }
 

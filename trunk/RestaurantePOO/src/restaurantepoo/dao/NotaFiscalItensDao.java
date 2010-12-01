@@ -7,6 +7,7 @@ package restaurantepoo.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import restaurantepoo.bancodados.CriaConexao;
 import restaurantepoo.logica.NotaFiscalItens;
@@ -23,7 +24,9 @@ public class NotaFiscalItensDao {
         this.conexao = CriaConexao.getConexao();
     }
 
-    public void adiciona(NotaFiscalItens nf) throws SQLException{
+    public int adiciona(NotaFiscalItens nf) throws SQLException{
+
+        int id = 0;
 
         String  sql = "insert into notafiscalitens (funcionario, valorpago, cpfcliente, tipopagamento) " +
                 "values (?,?,?,?)";
@@ -38,6 +41,19 @@ public class NotaFiscalItensDao {
 
         // Executa o código SQL
         stmt.execute();
+
+        sql = "SELECT COUNT(*) id FROM notafiscalitens";
+        stmt = this.conexao.prepareStatement(sql);
+
+        ResultSet rs = stmt.executeQuery();
+
+        while(rs.next()){
+            id = rs.getInt("id");
+        }
+
+        rs.close();
         stmt.close();
+
+        return id;
     }
 }

@@ -95,7 +95,7 @@ public class Configuracao {
 
 
     public String cabecalhoNota() {
-        return "\n" + nome + "\n" + endereco + "\n" + "Fone:" + telefone + "\n" + "\n" + "CNPJ: " + cnpj + "\n" + "IE: " + cnpj + "------------------------------------------------";
+        return "\n------------------------------------------------\nNome:" + nome + "\nEndereço:" + endereco + "\n" + "Fone:" + telefone + "\n" + "\n" + "CNPJ: " + cnpj + "\n" + "IE: " + cnpj + "\n------------------------------------------------";
     }
 
 }

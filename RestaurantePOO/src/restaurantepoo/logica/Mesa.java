@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package restaurantepoo.logica;
 
 import java.util.ArrayList;
@@ -12,7 +7,6 @@ import java.util.Date;
 
 /**
  *
- * @author Antonio
  *
  * - Classe onde serão guardados os produtos conumidos por uma determinada mesa
  * - O numero total de mesas é limitado, as mesas podem estar ocupadas ou livres
@@ -90,6 +84,7 @@ public class Mesa {
         return "\nMesa{" + "\nmesa=" + mesa + "\nhoraAbertura=" + horaAbertura + "\nhoraFechamento=" + horaFechamento + "\nvalorTotal=" + valorTotal + "\nstatus=" + status + "\nprodutos=" + produtos + '}';
     }
 
-
-
+    public String corpoNota1() {
+        return "\nMesa{" + "\nmesa=" + mesa + "\nhoraAbertura=" + horaAbertura + "\nhoraFechamento=" + horaFechamento + "\nvalorTotal=" + valorTotal +  "\nprodutos=" + produtos + '}';
+    }
 }

@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Todos os métodos de envolvem banco de dados e a configuração do sistema.
  */
 
 package restaurantepoo.dao;
@@ -13,16 +12,21 @@ import restaurantepoo.bancodados.CriaConexao;
 import restaurantepoo.logica.Configuracao;
 
 /**
+ * Classe que contém todas as manipulações de informações de Configuração no banco de dados.
  *
- * @author Antonio
  */
 public class ConfiguracaoDao {
 
     private Connection conexao;
 
+    /**
+     * Cria conexão
+     */
     public ConfiguracaoDao() throws SQLException{
         this.conexao = CriaConexao.getConexao();
     }
+
+
 
     public void criarConfiguracao() throws SQLException{
         Configuracao c = new Configuracao("Nome", "Telefone", "Endereço", "CNPJ", "Razao Social", "Insc Estadual", 0);
@@ -36,6 +40,7 @@ public class ConfiguracaoDao {
 
         ResultSet rs = stmt.executeQuery();
         while(rs.next()){
+            //métodos getX recuperam os dados de acordo com o tipo sql do atributo
             c1.setCnpj(rs.getString("cnpj"));
             c1.setRazaoSocial(rs.getString("razaosocial"));
             c1.setInscEstadual(rs.getString("inscestadual"));
@@ -47,7 +52,14 @@ public class ConfiguracaoDao {
          }
         }
 
-
+    /**
+     * Não é utilizado.
+     * Método para inserção de registro na tabela Configuração.
+     * Não é utilizado pois o banco vem com uma configuração genérica para indicar que os dados ainda não foram customizados.
+     * @see #altera(restaurantepoo.logica.Configuracao)
+     * @param c1
+     * @throws SQLException
+     */
     public void adiciona(Configuracao c1) throws SQLException{
 
         String  sql = "insert into configuracao (cnpj, razaosocial, inscestadual, nummesas,  " +
@@ -70,7 +82,11 @@ public class ConfiguracaoDao {
         stmt.execute();
         stmt.close();
     }
-
+    /**
+     * Método para atualização da configuração do sistema (dados do estabelecimento, principalmente).
+     * @param objeto configuração
+     * @throws SQLException
+     */
     public void altera(Configuracao c1) throws SQLException{
         String sql = "update configuracao set cnpj=?, razaosocial=?, inscestadual=?, nummesas=?, " +
                         "nome=?, endereco=?, telefone=?, descricaorefeicao=?";
